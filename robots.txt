@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sstv-decoder.mathieurenaud.fr/sitemap.xml
