@@ -342,19 +342,6 @@ ol {
     font-size: 0.95rem;
   }
 }
-
-.floatingchat-container-wrap {
-  left: unset !important;
-  right: 16px !important;
-  z-index: 99999998 !important;
-}
-.floating-chat-kofi-popup-iframe {
-  left: unset !important;
-  right: 16px !important;
-}
-.floatingchat-container-wrap-mobi,
-.floating-chat-kofi-popup-iframe-mobi,
-.floating-chat-kofi-popup-iframe-closer-mobi {
-  left: unset !important;
-  right: 16px !important;
+.cky-consent-container {
+  z-index: 999999999 !important;
 }
