@@ -342,6 +342,12 @@ ol {
     font-size: 0.95rem;
   }
 }
+
 .cky-consent-container {
   z-index: 999999999 !important;
+}
+
+.cky-revisit-bottom-left {
+  left: unset;
+  right: 15px;
 }
