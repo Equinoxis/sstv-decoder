@@ -348,6 +348,6 @@ ol {
 }
 
 .cky-revisit-bottom-left {
-  left: unset;
-  right: 15px;
+  left: unset !important;
+  right: 15px !important;
 }
