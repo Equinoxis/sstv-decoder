@@ -346,6 +346,7 @@ ol {
 .floatingchat-container-wrap {
   left: unset !important;
   right: 16px !important;
+  z-index: 99999998 !important;
 }
 .floating-chat-kofi-popup-iframe {
   left: unset !important;
@@ -356,10 +357,4 @@ ol {
 .floating-chat-kofi-popup-iframe-closer-mobi {
   left: unset !important;
   right: 16px !important;
-}
-
-.cky-consent-container {
-  left: 16px !important;
-  right: unset !important;
-  bottom: 16px !important;
 }
