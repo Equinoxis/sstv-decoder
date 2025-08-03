@@ -357,3 +357,9 @@ ol {
   left: unset !important;
   right: 16px !important;
 }
+
+.cky-consent-container {
+  left: 16px !important;
+  right: unset !important;
+  bottom: 16px !important;
+}
