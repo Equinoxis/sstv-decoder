@@ -59,6 +59,7 @@ a:hover {
   align-items: center;
   gap: 10px;
   padding: 20px;
+  width: 100%;
 }
 
 h2 {
@@ -291,6 +292,35 @@ ol {
   background-color: #f1f1f1;
 }
 
+.feedback-card {
+  position: relative;
+  width: 80%;
+  max-width: 100%;
+  background: #fff;
+  border: 1px solid #e9eef5;
+  border-left: 4px solid #007bff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 16px 18px;
+  text-align: left;
+}
+
+.feedback-card p {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.feedback-card a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.feedback-card a:hover {
+  text-decoration: underline;
+}
+
 /* ---- Responsive Styles ---- */
 @media screen and (max-width: 1024px) {
   .main-container {
@@ -308,6 +338,10 @@ ol {
 
   .content {
     padding: 20px;
+  }
+
+  .feedback-card {
+    width: 100%;
   }
 }
 
@@ -340,6 +374,14 @@ ol {
 
   .content p {
     font-size: 0.95rem;
+  }
+
+  .feedback-card {
+    padding: 14px 16px;
+  }
+
+  .feedback-card p {
+    font-size: 0.93rem;
   }
 }
 

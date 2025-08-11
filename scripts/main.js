@@ -6,6 +6,7 @@ const ctx = canvas.getContext("2d");
 const qualitySelect = document.getElementById("qualitySelect");
 const decodeButton = document.getElementById("decodeButton");
 const downloadImageButton = document.getElementById("downloadImageButton");
+const feedbackCard = document.getElementById("feedbackCard");
 
 let currentSamples = null;
 let currentSampleRate = null;
@@ -99,6 +100,7 @@ decoderWorker.onmessage = (event) => {
   ctx.putImageData(imgData, 0, 0);
   canvas.style.display = "block";
   downloadImageButton.style.display = "block";
+  feedbackCard.style.display = "block";
 
   decodeButton.disabled = false;
 };
