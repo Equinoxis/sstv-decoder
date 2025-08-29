@@ -202,6 +202,20 @@
           </select>
         </div>
 
+        <div>
+          <label for="modeSelect">SSTV Mode:</label>
+          <select id="modeSelect" class="selector">
+            <option value="auto" selected>🔍 Auto Detect</option>
+            <option value="8">Robot36</option>
+            <option value="12">Robot72</option>
+            <option value="44">Martin1</option>
+            <option value="40">Martin2</option>
+            <option value="60">Scottie1</option>
+            <option value="56">Scottie2</option>
+            <option value="76">ScottieSDX</option>
+          </select>    
+        </div>  
+
         <button id="decodeButton" disabled>Decode SSTV</button>
 
         <progress id="decodeProgress" value="0" max="100"></progress>

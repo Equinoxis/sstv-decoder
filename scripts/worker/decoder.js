@@ -1,12 +1,12 @@
-import SSTVDecoder from "../sstv/decoder.js";
+import SSTVDecoder from "../sstv/decoder.js";  
 
-self.onmessage = async (event) => {
-  const { samples, sampleRate, fftSize } = event.data;
+self.onmessage = async (event) => {  
+  const { samples, sampleRate, fftSize, forcedMode } = event.data;  
 
   const decoder = new SSTVDecoder(samples, sampleRate, fftSize, (percent) => {
     self.postMessage({ progress: percent });
-  });
-
+  }, forcedMode);
+  
   try {
     const { buffer, width, height } = await decoder.decode();
 

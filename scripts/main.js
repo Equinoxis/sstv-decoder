@@ -7,6 +7,7 @@ const qualitySelect = document.getElementById("qualitySelect");
 const decodeButton = document.getElementById("decodeButton");
 const downloadImageButton = document.getElementById("downloadImageButton");
 const feedbackCard = document.getElementById("feedbackCard");
+const modeSelect = document.getElementById("modeSelect");
 
 let currentSamples = null;
 let currentSampleRate = null;
@@ -68,15 +69,16 @@ decodeButton.addEventListener("click", () => {
   if (!currentSamples || !currentSampleRate) return;
 
   decodeButton.disabled = true;
-
   const fftQuality = parseInt(qualitySelect.value);
+  const forcedMode = modeSelect.value === "auto" ? null : parseInt(modeSelect.value);
 
   decoderWorker.postMessage({
     samples: currentSamples,
     sampleRate: currentSampleRate,
     fftSize: fftQuality,
-  });
-});
+    forcedMode: forcedMode
+  }); 
+}); 
 
 decoderWorker.onmessage = (event) => {
   if (event.data.progress !== undefined) {
