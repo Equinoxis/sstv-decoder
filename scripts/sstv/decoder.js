@@ -17,15 +17,28 @@ import {
 } from "../spec.js";
 
 class SSTVDecoder {
-  constructor(audioBuffer, sampleRate, fftSize = null, onProgress) {
+  constructor(audioBuffer, sampleRate, fftSize = null, onProgress, forcedMode) {
     this.samples = audioBuffer;
     this.sampleRate = sampleRate;
     this.fftSize = fftSize;
     this.mode = null;
     this.onProgress = onProgress;
-  }
+    this.forcedMode = forcedMode; 
+}
 
   async decode() {
+
+
+    if (this.forcedMode) {
+    this.mode = VIS_MAP[this.forcedMode];
+    if (!this.mode) {
+      console.warn(`Unknown VIS code: ${this.forcedMode}`);
+      return null;
+    }
+    if (this.onProgress) this.onProgress(10);
+    const imageData = this._decodeImageData(0);
+    return this._generateImageBuffer(imageData);
+    }
     const headerEnd = this._findHeader();
     if (this.onProgress) this.onProgress(5);
     if (headerEnd === null) {
