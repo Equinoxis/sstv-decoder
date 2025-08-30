@@ -42,7 +42,7 @@ dropZone.addEventListener("drop", (event) => {
 });
 
 function handleAudioFile(file) {
-  audioFileNameDisplay.textContent = `Selected File: ${file.name}`;
+  audioFileNameDisplay.innerHTML = `Selected File: <span style="color: #37a33dff; font-weight: bold; font-size: 1rem;">${file.name}</span>`;
   const reader = new FileReader();
 
   reader.onload = async () => {

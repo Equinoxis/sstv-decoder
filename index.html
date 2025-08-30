@@ -140,7 +140,9 @@
     <!-- End cookieyes banner -->
 
     <!-- Styles and Scripts -->
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style/global.css" />
+    <link rel="stylesheet" href="style/main.css" />
+    <link rel="stylesheet" href="style/content.css" />
     <script type="module" src="/scripts/main.js"></script>
   </head>
 
@@ -165,69 +167,67 @@
     </header>
 
     <main class="main-container">
-      <div class="decoder-container zone-container">
-        <h2>Convert Slow Scan Television Audio to Images</h2>
+      <h2>Convert Slow Scan Television Audio to Images</h2>
+      <p>
+        Load an SSTV audio file (WAV, MP3, etc.) to extract the transmitted
+        image
+      </p>
+
+      <p id="example">
+        Try with this example file :
+        <a href="/assets/test.mp3" download>Download test SSTV audio (MP3)</a>
+      </p>
+
+      <label for="audioInput" class="file-drop-zone" id="dropZone">
+        <p>Drag & Drop an audio file or Click to Upload</p>
+        <input type="file" id="audioInput" accept="audio/*" hidden />
+        <p class="filename" id="audioFileNameDisplay">No file selected</p>
+      </label>
+
+      <div class="selector-container">
+        <label for="qualitySelect" class="selector-label">FFT Quality :</label>
+
+        <select id="qualitySelect" class="selector">
+          <optgroup label="Performance (Faster, Lower Accuracy)">
+            <option value="64">⚡ Ultra Fast – Very Low Quality</option>
+            <option value="128">⚡ Very Fast – Low Quality</option>
+            <option value="256">⚡ Fast – Medium-Low Quality</option>
+          </optgroup>
+          <optgroup label="Balanced (Good Speed/Quality Tradeoff)">
+            <option value="512" selected>🚀 Balanced – Medium Quality</option>
+            <option value="1024">🚀 Balanced – Good Quality</option>
+          </optgroup>
+          <optgroup label="Quality (Slower, Higher Accuracy)">
+            <option value="2048">🎯 Slow - High Quality</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <button id="decodeButton" disabled>Decode SSTV</button>
+
+      <progress id="decodeProgress" value="0" max="100"></progress>
+
+      <canvas id="sstvCanvas"></canvas>
+
+      <button id="downloadImageButton" style="display: none">
+        Download Image
+      </button>
+
+      <div id="feedbackCard" class="feedback-card" style="display: none">
         <p>
-          Load an SSTV audio file (WAV, MP3, etc.) to extract the transmitted
-          image
+          I am new to developing this SSTV decoding tool. If you encounter any
+          difficulties during the decoding process, or if you would like to
+          share SSTV audio samples for testing, your feedback would be greatly
+          appreciated as I don't save any audio as it's 100% open-source and
+          client side.
+          <a
+            target="_blank"
+            rel="noopener"
+            href="https://www.linkedin.com/in/mathieu-renaud-inge/"
+          >
+            Contact-me.
+          </a>
         </p>
-
-        <p id="example">
-          Try with this example file :
-          <a href="/assets/test.mp3" download>Download test SSTV audio (MP3)</a>
-        </p>
-
-        <label for="audioInput" class="file-drop-zone" id="dropZone">
-          <p class="tips">Drag & Drop an audio file or Click to Upload</p>
-          <input type="file" id="audioInput" accept="audio/*" hidden />
-          <p class="filename" id="audioFileNameDisplay">No file selected</p>
-        </label>
-
-        <div>
-          <label for="qualitySelect">FFT Quality:</label>
-
-          <select id="qualitySelect" class="selector">
-            <optgroup label="Performance (Faster, Lower Accuracy)">
-              <option value="64">⚡ Ultra Fast – Very Low Quality</option>
-              <option value="128">⚡ Very Fast – Low Quality</option>
-              <option value="256">⚡ Fast – Medium-Low Quality</option>
-            </optgroup>
-            <optgroup label="Balanced (Good Speed/Quality Tradeoff)">
-              <option value="512" selected>🚀 Balanced – Medium Quality</option>
-              <option value="1024">🚀 Balanced – Good Quality</option>
-            </optgroup>
-            <optgroup label="Quality (Slower, Higher Accuracy)">
-              <option value="2048">🎯 Slow - High Quality</option>
-            </optgroup>
-          </select>
-        </div>
-
-        <button id="decodeButton" disabled>Decode SSTV</button>
-
-        <progress id="decodeProgress" value="0" max="100"></progress>
-
-        <canvas id="sstvCanvas"></canvas>
-
-        <button id="downloadImageButton" style="display: none">
-          Download Image
-        </button>
-
-        <div id="feedbackCard" class="feedback-card" style="display: none">
-          <p>
-            I am new to developing this SSTV decoding tool. If you encounter any
-            difficulties during the decoding process, or if you would like to
-            share SSTV audio samples for testing, your feedback would be greatly
-            appreciated as I don't save any audio as it's 100% open-source and
-            client side.
-            <a
-              target="_blank"
-              rel="noopener"
-              href="https://www.linkedin.com/in/mathieu-renaud-inge/"
-            >
-              Contact-me.
-            </a>
-          </p>
-        </div>
       </div>
     </main>
 

@@ -1,0 +1,89 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Arial", sans-serif;
+  text-align: center;
+  background-color: #f4f4f4;
+  color: #333;
+  margin: 0;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  gap: 20px;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 1.5rem;
+  color: #444;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  font-size: 1rem;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: scale(1.03);
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.header {
+  width: 100%;
+  margin: 0 auto;
+  padding: 30px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 760px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+}
+
+.cky-consent-container {
+  z-index: 999999999 !important;
+}
+
+.cky-revisit-bottom-left {
+  left: unset !important;
+  right: 15px !important;
+}
