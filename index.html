@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <title>
-      Online SSTV Decoder – Convert Slow Scan Television Audio to Images
+      Online SSTV Decoder - Decode Slow Scan Television Audio to Images
     </title>
 
     <meta charset="UTF-8" />
@@ -24,7 +24,7 @@
     <meta property="og:type" content="website" />
     <meta
       property="og:title"
-      content="Online SSTV Decoder – Decode Ham Radio Audio to Images"
+      content="Online SSTV Decoder - Decode Slow Scan Television Audio to Images"
     />
     <meta
       property="og:description"
@@ -40,7 +40,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="SSTV Decoder – Turn Slow Scan TV Audio into Images"
+      content="SSTV Decoder - Decode Slow Scan Television Audio to Images"
     />
     <meta
       name="twitter:description"
@@ -63,13 +63,9 @@
         "author": {
           "@type": "Person",
           "name": "Mathieu Renaud",
-          "url": "https://resume.mathieurenaud.fr/"
+          "url": "https://mathieurenaud.fr/"
         },
-        "image": "https://sstv-decoder.mathieurenaud.fr/assets/preview.jpg",
-        "sameAs": [
-          "https://github.com/Equinoxis/sstv-decoder",
-          "https://www.linkedin.com/in/mathieu-renaud-inge"
-        ]
+        "image": "https://sstv-decoder.mathieurenaud.fr/assets/preview.jpg"
       }
     </script>
 
@@ -162,7 +158,7 @@
       <h1>Online SSTV Decoder</h1>
       <p>
         by
-        <a href="https://resume.mathieurenaud.fr/">Mathieu Renaud</a>
+        <a href="https://mathieurenaud.fr/" rel="noopener">Mathieu Renaud</a>
       </p>
     </header>
 
@@ -189,13 +185,13 @@
 
         <select id="qualitySelect" class="selector">
           <optgroup label="Performance (Faster, Lower Accuracy)">
-            <option value="64">⚡ Ultra Fast – Very Low Quality</option>
-            <option value="128">⚡ Very Fast – Low Quality</option>
-            <option value="256">⚡ Fast – Medium-Low Quality</option>
+            <option value="64">⚡ Ultra Fast - Very Low Quality</option>
+            <option value="128">⚡ Very Fast - Low Quality</option>
+            <option value="256">⚡ Fast - Medium-Low Quality</option>
           </optgroup>
           <optgroup label="Balanced (Good Speed/Quality Tradeoff)">
-            <option value="512" selected>🚀 Balanced – Medium Quality</option>
-            <option value="1024">🚀 Balanced – Good Quality</option>
+            <option value="512" selected>🚀 Balanced - Medium Quality</option>
+            <option value="1024">🚀 Balanced - Good Quality</option>
           </optgroup>
           <optgroup label="Quality (Slower, Higher Accuracy)">
             <option value="2048">🎯 Slow - High Quality</option>
@@ -212,6 +208,8 @@
       <button id="downloadImageButton" style="display: none">
         Download Image
       </button>
+
+      <p id="errorMessage"></p>
 
       <div id="feedbackCard" class="feedback-card" style="display: none">
         <p>
@@ -428,7 +426,7 @@
       <ul>
         <li>
           <strong>SSTV Decoder (Android)</strong>: Decode SSTV signals using
-          your phone’s microphone or audio input –
+          your phone’s microphone or audio input -
           <a
             href="https://play.google.com/store/apps/details?id=xdsopl.robot36"
             target="_blank"
@@ -438,7 +436,7 @@
         </li>
         <li>
           <strong>SSTV Encoder (Android)</strong>: Generate and transmit SSTV
-          signals using image files –
+          signals using image files -
           <a
             href="https://play.google.com/store/apps/details?id=om.sstvencoder"
             target="_blank"

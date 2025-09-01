@@ -7,6 +7,7 @@ const qualitySelect = document.getElementById("qualitySelect");
 const decodeButton = document.getElementById("decodeButton");
 const downloadImageButton = document.getElementById("downloadImageButton");
 const feedbackCard = document.getElementById("feedbackCard");
+const errorMessage = document.getElementById("errorMessage");
 
 let currentSamples = null;
 let currentSampleRate = null;
@@ -81,12 +82,26 @@ decodeButton.addEventListener("click", () => {
 decoderWorker.onmessage = (event) => {
   if (event.data.progress !== undefined) {
     decodeProgress.style.display = "block";
+    errorMessage.style.display = "none";
     decodeProgress.value = event.data.progress;
     return;
   }
 
-  const { imageData, width, height } = event.data;
+  const { imageData, width, height, error } = event.data;
   decodeProgress.style.display = "none";
+
+  if (error) {
+    const errorMessage = document.getElementById("errorMessage");
+
+    errorMessage.innerHTML = `Error: ${error.message}`;
+    errorMessage.style.display = "block";
+
+    canvas.style.display = "none";
+    downloadImageButton.style.display = "none";
+    feedbackCard.style.display = "none";
+    decodeButton.disabled = false;
+    return;
+  }
 
   canvas.width = width;
   canvas.height = height;

@@ -16,6 +16,6 @@ self.onmessage = async (event) => {
       height,
     });
   } catch (err) {
-    self.postMessage({ error: err.message });
+    self.postMessage({ error: err });
   }
 };

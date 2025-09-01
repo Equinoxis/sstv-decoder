@@ -115,6 +115,23 @@
   background-color: #007bff;
 }
 
+#errorMessage {
+  display: none;
+  width: 80%;
+  padding: 12px 16px;
+  border: 1px solid #f5c2c7;
+  border-left: 4px solid #dc3545;
+  background-color: #f8d7da;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  margin: 10px 0;
+  text-align: left;
+  font-size: 0.95rem;
+  color: #842029;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
 canvas {
   width: 100%;
   max-width: 600px;
@@ -144,6 +161,10 @@ canvas {
 @media screen and (max-width: 1024px) {
   .main-container {
     padding: 30px 20px;
+    width: 100%;
+  }
+
+  #errorMessage {
     width: 100%;
   }
 

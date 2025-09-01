@@ -28,17 +28,9 @@ class SSTVDecoder {
   async decode() {
     const headerEnd = this._findHeader();
     if (this.onProgress) this.onProgress(5);
-    if (headerEnd === null) {
-      console.warn("No SSTV header detected");
-      return null;
-    }
 
     this.mode = this._decodeVIS(headerEnd);
     if (this.onProgress) this.onProgress(10);
-    if (!this.mode) {
-      console.warn("Failed to decode VIS header");
-      return null;
-    }
 
     const visEnd = headerEnd + Math.round(VIS_BIT_SIZE * 9 * this.sampleRate);
     const imageData = this._decodeImageData(visEnd);
@@ -92,8 +84,7 @@ class SSTVDecoder {
       }
     }
 
-    console.warn("SSTV header not found in audio.");
-    return null;
+    throw new Error("SSTV header not found in audio.");
   }
 
   _alignSync(alignStart, startOfSync = true) {
@@ -128,8 +119,7 @@ class SSTVDecoder {
 
     const parity = visBits.reduce((a, b) => a + b, 0) % 2 === 0;
     if (!parity) {
-      console.error("Invalid parity bit in VIS header");
-      return null;
+      throw new Error("Invalid parity bit in VIS header");
     }
 
     let visCode = 0;
@@ -139,8 +129,7 @@ class SSTVDecoder {
 
     const mode = VIS_MAP[visCode];
     if (!mode) {
-      console.error(`Unsupported VIS code: ${visCode}`);
-      return null;
+      throw new Error(`Unsupported VIS code: ${visCode}`);
     }
 
     console.log(`Detected SSTV mode: ${mode.NAME}`);
