@@ -23,7 +23,14 @@ const IMAGE_VISIBILITY_THRESHOLD = 0.7;
 
 let currentSamples = null;
 let currentSampleRate = null;
+let currentSourceFileName = null;
 let lastDecodedImage = null;
+
+function getDecodedImageDownloadName(sourceFileName) {
+  const name = sourceFileName.split(/[/\\]/).pop() || "audio";
+  const baseName = name.replace(/\.[^/.]+$/, "") || name;
+  return `${baseName} - SSTV decoded.png`;
+}
 const decoderWorker = new DecoderWorker();
 
 decodeButton.disabled = true;
@@ -245,6 +252,7 @@ dropZone.addEventListener("drop", (event) => {
 });
 
 function handleAudioFile(file) {
+  currentSourceFileName = file.name;
   dropZone.classList.add("has-file");
   audioFileNameDisplay.innerHTML = `Selected file: <span class="font-medium text-app-accent">${file.name}</span>`;
   const reader = new FileReader();
@@ -343,7 +351,9 @@ downloadImageButton.addEventListener("click", () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "decoded-image.png";
+    a.download = currentSourceFileName
+      ? getDecodedImageDownloadName(currentSourceFileName)
+      : "SSTV decoded.png";
     a.click();
     URL.revokeObjectURL(url);
   });
