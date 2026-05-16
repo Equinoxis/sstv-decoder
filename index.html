@@ -541,9 +541,27 @@
             </div>
           </div>
 
-          <div class="sstv-canvas-wrap" id="sstvCanvasWrap">
-            <div class="sstv-canvas-wrap__inner">
-              <canvas id="sstvCanvas"></canvas>
+          <div class="sstv-results" id="sstvResults">
+            <div class="sstv-canvas-wrap" id="sstvCanvasWrap">
+              <div class="sstv-canvas-wrap__inner">
+                <button
+                  type="button"
+                  id="sstvCanvasOpen"
+                  class="sstv-canvas-hit"
+                  aria-label="Open decoded image gallery"
+                >
+                  <canvas id="sstvCanvas"></canvas>
+                </button>
+              </div>
+            </div>
+
+            <div id="decodeGallery" class="decode-gallery" hidden>
+              <p class="decode-gallery__label">Previous decodes</p>
+              <ul
+                id="decodeGalleryList"
+                class="decode-gallery__list"
+                role="list"
+              ></ul>
             </div>
           </div>
 

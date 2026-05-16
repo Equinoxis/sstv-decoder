@@ -1,4 +1,5 @@
 import DecoderWorker from "./worker/decoder.js?worker";
+import { openDecodeGallery } from "./decode-gallery.js";
 
 const audioInput = document.getElementById("audioInput");
 const dropZone = document.getElementById("dropZone");
@@ -14,6 +15,9 @@ const decodeProgressSlot = document.getElementById("decodeProgressSlot");
 const decodeProgress = document.getElementById("decodeProgress");
 const decodeProgressFill = decodeProgress?.querySelector(".decode-progress__fill");
 const sstvCanvasWrap = document.getElementById("sstvCanvasWrap");
+const sstvCanvasOpen = document.getElementById("sstvCanvasOpen");
+const decodeGallery = document.getElementById("decodeGallery");
+const decodeGalleryList = document.getElementById("decodeGalleryList");
 const decodeProgressPercent = decodeProgress?.querySelector(
   ".decode-progress__percent"
 );
@@ -42,6 +46,9 @@ let currentSamples = null;
 let currentSampleRate = null;
 let currentSourceFileName = null;
 let lastDecodedImage = null;
+
+/** @type {{ imageData: ImageData, width: number, height: number, sourceFileName: string | null, objectUrl: string }[]} */
+const decodedImages = [];
 
 function getDecodedImageDownloadName(sourceFileName) {
   const name = sourceFileName.split(/[/\\]/).pop() || "audio";
@@ -183,12 +190,81 @@ function hideDecodeProgress({ onComplete } = {}) {
 }
 
 function hideDecodedCanvas() {
-  if (!sstvCanvasWrap) return;
+  if (!sstvCanvasWrap || decodedImages.length > 0) return;
   sstvCanvasWrap.classList.remove(
     "sstv-canvas-wrap--open",
     "sstv-canvas-wrap--entering"
   );
 }
+
+function imageDataToObjectUrl(imageData) {
+  const offscreen = new OffscreenCanvas(imageData.width, imageData.height);
+  const offCtx = offscreen.getContext("2d");
+  offCtx.putImageData(imageData, 0, 0);
+  return offscreen.convertToBlob({ type: "image/png" }).then((blob) => {
+    if (!blob) throw new Error("Failed to create image blob");
+    return URL.createObjectURL(blob);
+  });
+}
+
+function revokeDecodedImageUrls() {
+  for (const item of decodedImages) {
+    URL.revokeObjectURL(item.objectUrl);
+  }
+}
+
+function renderDecodeGallery() {
+  if (!decodeGallery || !decodeGalleryList) return;
+
+  const archived = decodedImages.slice(0, -1);
+  decodeGallery.hidden = archived.length === 0;
+  decodeGalleryList.replaceChildren();
+
+  for (let i = archived.length - 1; i >= 0; i--) {
+    const entry = archived[i];
+    const decodeIndex = i;
+    const decodeNumber = i + 1;
+
+    const li = document.createElement("li");
+    li.className = "decode-gallery__item";
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "decode-gallery__btn";
+    const label = entry.sourceFileName
+      ? `Open ${entry.sourceFileName} in gallery`
+      : `Open decode ${decodeNumber} in gallery`;
+    btn.setAttribute("aria-label", label);
+    if (entry.sourceFileName) btn.title = entry.sourceFileName;
+
+    const thumb = document.createElement("canvas");
+    thumb.width = entry.width;
+    thumb.height = entry.height;
+    thumb.className = "decode-gallery__thumb";
+    thumb.getContext("2d").putImageData(entry.imageData, 0, 0);
+
+    const srOnly = document.createElement("span");
+    srOnly.className = "decode-gallery__sr-only";
+    srOnly.textContent = label;
+
+    btn.append(thumb, srOnly);
+    btn.addEventListener("click", () => {
+      openDecodeGallery(decodedImages, decodeIndex);
+    });
+
+    li.append(btn);
+    decodeGalleryList.append(li);
+  }
+
+  decodeGalleryList.scrollLeft = 0;
+}
+
+window.addEventListener("beforeunload", revokeDecodedImageUrls);
+
+sstvCanvasOpen?.addEventListener("click", () => {
+  if (!decodedImages.length) return;
+  openDecodeGallery(decodedImages, decodedImages.length - 1);
+});
 
 function revealDecodedCanvas() {
   if (!sstvCanvasWrap) return;
@@ -472,8 +548,10 @@ decoderWorker.onmessage = (event) => {
         errorMessage.style.display = "block";
 
         hideDecodedCanvas();
-        downloadImageButton.style.display = "none";
-        feedbackCard.style.display = "none";
+        if (decodedImages.length === 0) {
+          downloadImageButton.style.display = "none";
+          feedbackCard.style.display = "none";
+        }
         decodeButton.disabled = false;
       },
     });
@@ -485,27 +563,43 @@ decoderWorker.onmessage = (event) => {
     width,
     height
   );
-  lastDecodedImage = imgData;
 
   hideDecodeProgress({
-    onComplete: () => {
-      const isFirstReveal = !sstvCanvasWrap?.classList.contains(
-        "sstv-canvas-wrap--open"
-      );
+    onComplete: async () => {
+      try {
+        const objectUrl = await imageDataToObjectUrl(imgData);
+        decodedImages.push({
+          imageData: imgData,
+          width,
+          height,
+          sourceFileName: currentSourceFileName,
+          objectUrl,
+        });
+        lastDecodedImage = imgData;
 
-      canvas.width = width;
-      canvas.height = height;
-      ctx.putImageData(imgData, 0, 0);
+        const isFirstReveal = !sstvCanvasWrap?.classList.contains(
+          "sstv-canvas-wrap--open"
+        );
 
-      if (isFirstReveal) {
-        revealDecodedCanvas();
+        canvas.width = width;
+        canvas.height = height;
+        ctx.putImageData(imgData, 0, 0);
+
+        if (isFirstReveal) {
+          revealDecodedCanvas();
+        }
+        renderDecodeGallery();
+        downloadImageButton.style.display = "inline-flex";
+        feedbackCard.style.display = "block";
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => handlePostDecodeScroll(canvas));
+        });
+      } catch (err) {
+        console.error("Failed to prepare decoded image:", err);
+        errorMessage.textContent = "Error: Failed to display decoded image.";
+        errorMessage.style.display = "block";
       }
-      downloadImageButton.style.display = "inline-flex";
-      feedbackCard.style.display = "block";
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => handlePostDecodeScroll(canvas));
-      });
 
       decodeButton.disabled = false;
     },
