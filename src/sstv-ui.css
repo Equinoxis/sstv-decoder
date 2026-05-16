@@ -1,0 +1,230 @@
+/* SSTV decoder UI (tool panel) */
+
+.file-drop-zone {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 1.75rem 1rem;
+	border: 2px dashed var(--app-border-strong);
+	border-radius: 0.75rem;
+	background: color-mix(in srgb, var(--app-surface-input) 80%, transparent);
+	text-align: center;
+	font-size: 0.9375rem;
+	font-weight: 500;
+	color: var(--app-muted);
+	cursor: pointer;
+	transition:
+		border-color 0.2s ease,
+		background-color 0.2s ease,
+		color 0.2s ease;
+}
+
+.file-drop-zone:hover,
+.file-drop-zone.active {
+	border-color: color-mix(in srgb, var(--app-accent) 55%, var(--app-border-strong));
+	background: color-mix(in srgb, var(--app-accent) 6%, var(--app-surface-input));
+	color: var(--app-text);
+}
+
+.file-drop-zone .filename {
+	font-size: 0.8125rem;
+	font-weight: 400;
+	color: var(--app-muted);
+}
+
+.app-select {
+	width: 100%;
+	max-width: 20rem;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.5rem;
+	border: 1px solid var(--app-border-strong);
+	background-color: var(--app-surface-input);
+	font-size: 0.875rem;
+	color: var(--app-text);
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+	transition:
+		border-color 0.15s ease,
+		box-shadow 0.15s ease;
+}
+
+.app-select:hover {
+	border-color: color-mix(in srgb, var(--app-accent) 35%, var(--app-border-strong));
+}
+
+.app-select:focus-visible {
+	outline: none;
+	border-color: var(--app-accent);
+	box-shadow:
+		0 0 0 2px color-mix(in srgb, var(--app-accent) 22%, transparent),
+		inset 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.app-select--full {
+	width: 100%;
+	max-width: none;
+}
+
+/* FFT quality field */
+.sstv-quality-field {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	gap: 0.75rem;
+	padding: 0.875rem 1rem;
+	border-radius: 0.75rem;
+	border: 1px solid var(--app-border);
+	background: color-mix(in srgb, var(--app-surface-input) 88%, transparent);
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+:root.dark .sstv-quality-field {
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not(.light):not(.dark) .sstv-quality-field {
+		box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+	}
+}
+
+.sstv-quality-field__label {
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: var(--app-text);
+}
+
+.sstv-quality-field__lede {
+	margin: 0;
+	font-size: 0.75rem;
+	line-height: 1.45;
+	color: var(--app-muted);
+}
+
+.sstv-quality-select-wrap {
+	position: relative;
+	width: 100%;
+}
+
+.sstv-quality-select-wrap::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	right: 0.875rem;
+	width: 0.45rem;
+	height: 0.45rem;
+	border-right: 2px solid var(--app-muted);
+	border-bottom: 2px solid var(--app-muted);
+	pointer-events: none;
+	transform: translateY(-65%) rotate(45deg);
+}
+
+.sstv-quality-select {
+	min-height: 2.75rem;
+	padding: 0.625rem 2.25rem 0.625rem 0.875rem;
+	border-radius: 0.625rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+	appearance: none;
+	-webkit-appearance: none;
+	cursor: pointer;
+}
+
+.sstv-quality-field__hint {
+	margin: 0;
+	padding: 0.5rem 0.65rem;
+	border-radius: 0.5rem;
+	border-left: 3px solid var(--app-accent);
+	background: color-mix(in srgb, var(--app-accent) 6%, var(--app-surface-input));
+	font-size: 0.75rem;
+	line-height: 1.5;
+	color: color-mix(in srgb, var(--app-text) 85%, var(--app-muted));
+}
+
+#decodeProgress {
+	display: none;
+	width: 100%;
+	height: 0.5rem;
+	appearance: none;
+	-webkit-appearance: none;
+	border: none;
+	border-radius: 9999px;
+	overflow: hidden;
+	background-color: color-mix(in srgb, var(--app-muted) 18%, var(--app-surface-input));
+}
+
+#decodeProgress::-webkit-progress-bar {
+	background-color: color-mix(in srgb, var(--app-muted) 18%, var(--app-surface-input));
+	border-radius: 9999px;
+}
+
+#decodeProgress::-webkit-progress-value {
+	background-color: var(--app-accent);
+	border-radius: 9999px;
+	transition: width 0.2s ease;
+}
+
+#decodeProgress::-moz-progress-bar {
+	background-color: var(--app-accent);
+	border-radius: 9999px;
+}
+
+#errorMessage {
+	display: none;
+	width: 100%;
+	padding: 0.75rem 1rem;
+	border-radius: 0.75rem;
+	border: 1px solid color-mix(in srgb, var(--app-danger) 40%, var(--app-border));
+	border-left: 3px solid var(--app-danger);
+	background: color-mix(in srgb, var(--app-danger) 8%, var(--app-surface-input));
+	font-size: 0.875rem;
+	line-height: 1.5;
+	font-weight: 500;
+	color: var(--app-danger);
+	text-align: left;
+}
+
+.sstv-canvas-wrap {
+	display: flex;
+	width: 100%;
+	justify-content: center;
+}
+
+#sstvCanvas {
+	display: none;
+	/* Scale up from native SSTV resolution (e.g. 320px) for preview; download stays full-res */
+	width: min(100%, 36rem);
+	height: auto;
+	max-height: min(70vh, 32rem);
+	border-radius: 0.75rem;
+	border: 1px solid var(--app-border);
+	background-color: var(--app-surface-input);
+	image-rendering: pixelated;
+	image-rendering: crisp-edges;
+}
+
+.feedback-card {
+	display: none;
+	width: 100%;
+	padding: 1rem 1.1rem;
+	border-radius: 0.75rem;
+	border: 1px solid var(--app-border);
+	border-left: 3px solid var(--app-accent);
+	background: color-mix(in srgb, var(--app-accent) 6%, var(--app-surface-input));
+	text-align: left;
+}
+
+.feedback-card p {
+	margin: 0;
+	font-size: 0.875rem;
+	line-height: 1.65;
+	color: color-mix(in srgb, var(--app-text) 88%, var(--app-muted));
+}
+
+.app-btn-primary:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+	transform: none;
+}

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <title>
@@ -17,11 +17,11 @@
       content="SSTV Decoder, Slow Scan Television, Robot36, Scottie1, Martin1, ham radio, audio to image, amateur radio SSTV, browser-based SSTV decoder"
     />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#4f46e5" />
     <link rel="canonical" href="https://sstv-decoder.mathieurenaud.fr/" />
 
-    <!-- Open Graph (Facebook, LinkedIn) -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Online SSTV Decoder" />
     <meta
       property="og:title"
       content="Online SSTV Decoder - Decode Slow Scan Television Audio to Images"
@@ -36,7 +36,6 @@
       content="https://sstv-decoder.mathieurenaud.fr/assets/preview.jpg"
     />
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
@@ -52,7 +51,6 @@
     />
     <meta name="twitter:site" content="@Mathieu_Renaud_" />
 
-    <!-- Schema.org Structured Data -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -69,7 +67,6 @@
       }
     </script>
 
-    <!-- Favicon and Manifest -->
     <link
       rel="apple-touch-icon"
       sizes="180x180"
@@ -91,12 +88,15 @@
     <link
       rel="mask-icon"
       href="/assets/safari-pinned-tab.svg"
-      color="#2b5797"
+      color="#4f46e5"
     />
-    <meta name="msapplication-TileColor" content="#2b5797" />
+    <meta name="msapplication-TileColor" content="#4f46e5" />
 
-    <!-- Google Tag Manager -->
-    <script>
+    <script
+      type="text/plain"
+      data-category="analytics"
+      data-service="google_tag_manager"
+    >
       (function (w, d, s, l, i) {
         w[l] = w[l] || [];
         w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
@@ -108,10 +108,12 @@
         f.parentNode.insertBefore(j, f);
       })(window, document, "script", "dataLayer", "GTM-MB2Q5QFV");
     </script>
-    <!-- End Google Tag Manager -->
 
-    <!-- Start Clarity banner -->
-    <script type="text/javascript">
+    <script
+      type="text/plain"
+      data-category="analytics"
+      data-service="microsoft_clarity"
+    >
       (function (c, l, a, r, i, t, y) {
         c[a] =
           c[a] ||
@@ -125,25 +127,11 @@
         y.parentNode.insertBefore(t, y);
       })(window, document, "clarity", "script", "sp3m2upiqr");
     </script>
-    <!-- End Clarity banner -->
-
-    <!-- Start cookieyes banner -->
-    <script
-      id="cookieyes"
-      type="text/javascript"
-      src="https://cdn-cookieyes.com/client_data/e784c340a691d59c68d1b13f/script.js"
-    ></script>
-    <!-- End cookieyes banner -->
-
-    <!-- Styles and Scripts -->
-    <link rel="stylesheet" href="style/global.css" />
-    <link rel="stylesheet" href="style/main.css" />
-    <link rel="stylesheet" href="style/content.css" />
-    <script type="module" src="/scripts/main.js"></script>
   </head>
 
-  <body>
-    <!-- Google Tag Manager (noscript) -->
+  <body
+    class="relative min-h-screen bg-app-bg text-app-text antialiased transition-colors duration-200"
+  >
     <noscript
       ><iframe
         src="https://www.googletagmanager.com/ns.html?id=GTM-MB2Q5QFV"
@@ -152,401 +140,619 @@
         style="display: none; visibility: hidden"
       ></iframe
     ></noscript>
-    <!-- End Google Tag Manager (noscript) -->
 
-    <header class="header">
-      <h1>Online SSTV Decoder</h1>
-      <p>
-        by
-        <a href="https://mathieurenaud.fr/" rel="noopener">Mathieu Renaud</a>
-      </p>
-    </header>
+    <div class="app-ambient" aria-hidden="true">
+      <div class="app-ambient__wash"></div>
+      <div class="app-ambient__blob app-ambient__blob--top"></div>
+      <div class="app-ambient__blob app-ambient__blob--bottom"></div>
+      <div class="app-ambient__blob app-ambient__blob--side"></div>
+      <div class="app-ambient__grid"></div>
+      <div class="app-ambient__grain"></div>
+    </div>
 
-    <main class="main-container">
-      <h2>Convert Slow Scan Television Audio to Images</h2>
-      <p>
-        Load an SSTV audio file (WAV, MP3, etc.) to extract the transmitted
-        image
-      </p>
+    <div
+      class="relative z-10 mx-auto flex min-h-screen max-w-[1600px] flex-col px-3.5 pb-7 pt-5 sm:px-5 lg:px-7"
+    >
+      <header
+        class="mb-6 flex flex-col gap-5 border-b border-app-border pb-6 sm:flex-row sm:items-start sm:justify-between sm:gap-8"
+      >
+        <div class="min-w-0 flex-1">
+          <p class="app-hero-pill mb-3">Ham radio · Client-side</p>
+          <h1
+            class="font-sans text-2xl font-semibold tracking-tight text-app-text sm:text-[1.75rem]"
+          >
+            Online SSTV Decoder
+          </h1>
+          <p
+            class="mt-1.5 max-w-2xl text-sm font-medium leading-snug text-app-text"
+          >
+            Convert Slow Scan Television audio to images in your browser.
+          </p>
+          <p class="mt-2 max-w-2xl text-sm leading-relaxed text-app-muted">
+            Upload an SSTV recording (WAV, MP3, OGG, and more). This decoder
+            detects the VIS code, supports Robot36, Scottie, Martin, and related
+            modes, and renders the image on a canvas - entirely client-side, with
+            no server upload.
+          </p>
+          <p class="mt-2 text-xs text-app-muted">
+            By
+            <a
+              href="https://mathieurenaud.fr/"
+              class="font-medium text-app-accent underline decoration-app-accent/30 underline-offset-2 transition-colors hover:text-app-accent-hover hover:decoration-app-accent-hover/50"
+              rel="noopener noreferrer"
+              >Mathieu Renaud</a
+            >
+          </p>
+        </div>
+        <div
+          class="flex shrink-0 flex-col gap-1.5 rounded-xl border border-app-border bg-app-surface-input/80 p-2 shadow-sm sm:items-end"
+        >
+          <span
+            id="theme-label"
+            class="text-xs font-semibold uppercase tracking-wider text-app-muted"
+            >Theme</span
+          >
+          <div
+            id="theme-bar"
+            class="w-full min-w-[min(100%,16.75rem)] sm:min-w-[17rem] sm:w-auto"
+            role="radiogroup"
+            aria-labelledby="theme-label"
+            title="Light, dark, or match your system appearance"
+            data-theme-mode="system"
+          >
+            <span class="theme-bar__thumb" aria-hidden="true"></span>
+            <button
+              type="button"
+              id="theme-btn-system"
+              class="theme-bar__btn theme-bar__btn--active"
+              role="radio"
+              aria-checked="true"
+              data-theme-value="system"
+              tabindex="0"
+            >
+              System
+            </button>
+            <button
+              type="button"
+              id="theme-btn-light"
+              class="theme-bar__btn"
+              role="radio"
+              aria-checked="false"
+              data-theme-value="light"
+              tabindex="-1"
+            >
+              Light
+            </button>
+            <button
+              type="button"
+              id="theme-btn-dark"
+              class="theme-bar__btn"
+              role="radio"
+              aria-checked="false"
+              data-theme-value="dark"
+              tabindex="-1"
+            >
+              Dark
+            </button>
+          </div>
+        </div>
+      </header>
 
-      <p id="example">
-        Try with this example file :
-        <a href="/assets/test.mp3" download>Download test SSTV audio (MP3)</a>
-      </p>
+      <main aria-label="SSTV decoder" class="flex w-full flex-1 flex-col">
+        <section
+          class="app-panel flex w-full min-h-0 flex-1 flex-col items-stretch gap-4 p-4 sm:p-6"
+        >
+          <div class="text-center">
+            <h2 class="text-lg font-semibold tracking-tight text-app-text">
+              Convert Slow Scan Television Audio to Images
+            </h2>
+            <p class="mt-1 text-sm text-app-muted">
+              Load an SSTV audio file to extract the transmitted image.
+            </p>
+            <p id="example" class="mt-2 text-xs text-app-muted">
+              Try with this example:
+              <a
+                href="/assets/test.mp3"
+                download
+                class="font-medium text-app-accent underline decoration-app-accent/30 underline-offset-2 hover:text-app-accent-hover"
+                >Download test SSTV audio (MP3)</a
+              >
+            </p>
+          </div>
 
-      <label for="audioInput" class="file-drop-zone" id="dropZone">
-        <p>Drag & Drop an audio file or Click to Upload</p>
-        <input type="file" id="audioInput" accept="audio/*" hidden />
-        <p class="filename" id="audioFileNameDisplay">No file selected</p>
-      </label>
+          <label for="audioInput" class="file-drop-zone" id="dropZone">
+            <p>Drag &amp; drop an audio file or click to upload</p>
+            <input type="file" id="audioInput" accept="audio/*" hidden />
+            <p class="filename" id="audioFileNameDisplay">No file selected</p>
+          </label>
 
-      <div class="selector-container">
-        <label for="qualitySelect" class="selector-label">FFT Quality :</label>
+          <div class="sstv-quality-field" id="quality-field">
+            <label for="qualitySelect" class="sstv-quality-field__label"
+              >FFT quality</label
+            >
+            <p class="sstv-quality-field__lede">
+              Higher FFT size improves accuracy but takes longer to decode.
+            </p>
+            <div class="sstv-quality-select-wrap">
+              <select
+                id="qualitySelect"
+                class="app-select app-select--full sstv-quality-select"
+              >
+                <optgroup label="Fast (lower accuracy)">
+                  <option value="64">Ultra fast · FFT 64</option>
+                  <option value="128">Very fast · FFT 128</option>
+                  <option value="256">Fast · FFT 256</option>
+                </optgroup>
+                <optgroup label="Balanced">
+                  <option value="512" selected>Balanced · FFT 512</option>
+                  <option value="1024">Good quality · FFT 1024</option>
+                </optgroup>
+                <optgroup label="Best quality (slower)">
+                  <option value="2048">High quality · FFT 2048</option>
+                </optgroup>
+              </select>
+            </div>
+            <p
+              class="sstv-quality-field__hint"
+              id="qualityHint"
+              aria-live="polite"
+            >
+              Balanced — good speed and accuracy for most recordings.
+            </p>
+          </div>
 
-        <select id="qualitySelect" class="selector">
-          <optgroup label="Performance (Faster, Lower Accuracy)">
-            <option value="64">⚡ Ultra Fast - Very Low Quality</option>
-            <option value="128">⚡ Very Fast - Low Quality</option>
-            <option value="256">⚡ Fast - Medium-Low Quality</option>
-          </optgroup>
-          <optgroup label="Balanced (Good Speed/Quality Tradeoff)">
-            <option value="512" selected>🚀 Balanced - Medium Quality</option>
-            <option value="1024">🚀 Balanced - Good Quality</option>
-          </optgroup>
-          <optgroup label="Quality (Slower, Higher Accuracy)">
-            <option value="2048">🎯 Slow - High Quality</option>
-          </optgroup>
-        </select>
-      </div>
+          <div class="flex flex-wrap items-center justify-center gap-3">
+            <button type="button" id="decodeButton" class="app-btn-primary">
+              Decode SSTV
+            </button>
+            <button
+              type="button"
+              id="downloadImageButton"
+              class="app-btn-secondary"
+              style="display: none"
+            >
+              Download image
+            </button>
+          </div>
 
-      <button id="decodeButton" disabled>Decode SSTV</button>
+          <progress id="decodeProgress" value="0" max="100"></progress>
 
-      <progress id="decodeProgress" value="0" max="100"></progress>
+          <div class="sstv-canvas-wrap">
+            <canvas id="sstvCanvas"></canvas>
+          </div>
 
-      <canvas id="sstvCanvas"></canvas>
+          <p id="errorMessage" role="alert"></p>
 
-      <button id="downloadImageButton" style="display: none">
-        Download Image
-      </button>
+          <div id="feedbackCard" class="feedback-card">
+            <p>
+              I am new to developing this SSTV decoding tool. If you encounter
+              difficulties or would like to share SSTV audio samples for testing,
+              your feedback is appreciated — no audio is saved; everything runs
+              client-side.
+              <a
+                target="_blank"
+                rel="noopener"
+                href="https://www.linkedin.com/in/mathieu-renaud-inge/"
+                class="font-medium text-app-accent underline decoration-app-accent/30 underline-offset-2 hover:text-app-accent-hover"
+                >Contact me</a
+              >.
+            </p>
+          </div>
+        </section>
+      </main>
 
-      <p id="errorMessage"></p>
+      <article
+        id="sstv-guide"
+        class="seo-doc app-panel mt-12 overflow-hidden p-4 sm:p-6 lg:p-8"
+        aria-labelledby="seo-doc-heading"
+      >
+        <header class="seo-doc__header">
+          <h2 id="seo-doc-heading" class="seo-doc__title">
+            Understand <strong>Slow Scan Television (SSTV)</strong> and <br />
+            How to <strong>Decode SSTV Images</strong>
+          </h2>
+          <p class="seo-doc__lede">
+            A practical guide to SSTV signal structure, common modes, and
+            browser-based decoding for amateur radio and education.
+          </p>
+        </header>
 
-      <div id="feedbackCard" class="feedback-card" style="display: none">
-        <p>
-          I am new to developing this SSTV decoding tool. If you encounter any
-          difficulties during the decoding process, or if you would like to
-          share SSTV audio samples for testing, your feedback would be greatly
-          appreciated as I don't save any audio as it's 100% open-source and
-          client side.
+        <nav class="seo-doc-toc" aria-label="Guide table of contents">
+          <p class="seo-doc-toc__label">On this page</p>
+          <ul class="seo-doc-toc__list">
+            <li><a class="seo-doc-toc__link" href="#sstv-signal-structure">SSTV Signal Structure</a></li>
+            <li><a class="seo-doc-toc__link" href="#sstv-modes">Common SSTV Modes</a></li>
+            <li><a class="seo-doc-toc__link" href="#decoding-process">Decoding Process</a></li>
+            <li><a class="seo-doc-toc__link" href="#technical-characteristics">Technical Characteristics</a></li>
+            <li><a class="seo-doc-toc__link" href="#use-cases">Use Cases and Practical Applications</a></li>
+            <li><a class="seo-doc-toc__link" href="#modern-tools">Modern SSTV Decoding Tools</a></li>
+            <li><a class="seo-doc-toc__link" href="#conclusion">Conclusion</a></li>
+            <li><a class="seo-doc-toc__link" href="#frequently-asked-questions">FAQ</a></li>
+            <li><a class="seo-doc-toc__link" href="#connect-with-mathieu">Connect with Mathieu Renaud</a></li>
+          </ul>
+        </nav>
+
+        <div class="seo-doc__body">
+          <section class="seo-doc-section">
+            <p>
+              <strong>Slow Scan Television</strong>, abbreviated as
+              <strong>SSTV</strong>, is a technique used to transmit static images
+              over narrowband radio frequencies. It is widely used by
+              <strong>amateur radio operators</strong> and space agencies due to its
+              efficiency in sending visual data using minimal bandwidth. Unlike
+              traditional video transmission, which requires high data rates, SSTV
+              sends images line by line as modulated audio tones, making it ideal for
+              long-distance and low-power communications.
+            </p>
+            <p>
+              SSTV was initially developed in the 1950s for military and scientific
+              use. Over time, it became a popular tool among radio amateurs,
+              especially for communicating during emergencies, engaging in hobby
+              activities, and receiving images from space missions, including
+              broadcasts from the <strong>International Space Station</strong>. The
+              audio signal, once recorded or received live, can be decoded back into a
+              visual image using this <strong>SSTV Decoder</strong>.
+            </p>
+          </section>
+
+          <section id="sstv-signal-structure" class="seo-doc-section">
+            <h3 class="seo-doc-h3">SSTV Signal Structure</h3>
+            <p>
+              An SSTV transmission follows a structured format that enables precise
+              decoding. It typically includes the following components:
+            </p>
+            <ul class="seo-doc-ul">
+              <li>
+                <strong>Leader tone</strong>: A continuous high-frequency tone,
+                usually around 1900 Hz, that prepares the decoder for synchronization.
+              </li>
+              <li>
+                <strong>Break signal</strong>: A brief lower-frequency tone, around
+                1200 Hz, that indicates the end of the leader tone.
+              </li>
+              <li>
+                <strong>VIS code</strong>: A set of tones encoding the mode used,
+                allowing the decoder to interpret the image structure correctly.
+              </li>
+              <li>
+                <strong>Synchronization pulses</strong>: Regular tones marking the
+                beginning of each line or channel within the image.
+              </li>
+              <li>
+                <strong>Image scan lines</strong>: The core of the transmission, where
+                each pixel's brightness or color is represented by an audio frequency.
+              </li>
+            </ul>
+          </section>
+
+          <section id="sstv-modes" class="seo-doc-section">
+            <h3 class="seo-doc-h3">Common SSTV Modes</h3>
+            <p>
+              SSTV supports various transmission modes, each designed to balance image
+              resolution, transmission speed, and audio bandwidth. Some of the most
+              widely used modes are listed below:
+            </p>
+            <div class="seo-doc-table-wrap">
+              <table class="seo-doc-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Mode</th>
+                    <th scope="col">Resolution</th>
+                    <th scope="col">Transmission Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Robot36</td>
+                    <td>320 × 240</td>
+                    <td>~ 36 seconds</td>
+                  </tr>
+                  <tr>
+                    <td>Scottie1</td>
+                    <td>320 × 256</td>
+                    <td>~ 110 seconds</td>
+                  </tr>
+                  <tr>
+                    <td>Martin1</td>
+                    <td>320 × 256</td>
+                    <td>~ 114 seconds</td>
+                  </tr>
+                  <tr>
+                    <td>Robot72</td>
+                    <td>320 × 240</td>
+                    <td>~ 72 seconds</td>
+                  </tr>
+                  <tr>
+                    <td>Martin2</td>
+                    <td>320 × 256</td>
+                    <td>~ 58 seconds</td>
+                  </tr>
+                  <tr>
+                    <td>Scottie2</td>
+                    <td>320 × 256</td>
+                    <td>~ 71 seconds</td>
+                  </tr>
+                  <tr>
+                    <td>ScottieSDX</td>
+                    <td>640 × 496</td>
+                    <td>~ 539 seconds</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="decoding-process" class="seo-doc-section">
+            <h3 class="seo-doc-h3">Decoding Process</h3>
+            <p>
+              Decoding an SSTV signal involves converting the received audio tones
+              into pixel data. The process generally includes the following steps:
+            </p>
+            <ol class="seo-doc-ol">
+              <li>
+                Identify and extract the VIS header to determine the SSTV mode used
+                for encoding.
+              </li>
+              <li>
+                Use the leader tone and sync pulses to align the decoding process with
+                the signal timing.
+              </li>
+              <li>
+                Perform a Fast Fourier Transform, or FFT, on each time window to
+                measure the dominant frequency.
+              </li>
+              <li>
+                Translate each frequency value into a luminance or color channel
+                intensity for the corresponding pixel.
+              </li>
+              <li>
+                Assemble the pixels line by line to reconstruct the final image on the
+                display.
+              </li>
+            </ol>
+          </section>
+
+          <section id="technical-characteristics" class="seo-doc-section">
+            <h3 class="seo-doc-h3">Technical Characteristics</h3>
+            <p>
+              SSTV signals operate within the audio frequency range, typically between
+              1500 and 2300 Hz. Each color or brightness value is transmitted by
+              holding a specific frequency for a short duration. In color modes like
+              YUV, three separate channels are used: Y for brightness, U and V for
+              color difference components.
+            </p>
+            <p>
+              Synchronization tones are critical for reliable decoding. These tones
+              ensure that the decoder remains aligned with the image structure
+              throughout the transmission. Without correct synchronization, the
+              decoded image may appear distorted, offset, or scrambled.
+            </p>
+          </section>
+
+          <section id="use-cases" class="seo-doc-section">
+            <h3 class="seo-doc-h3">Use Cases and Practical Applications</h3>
+            <ul class="seo-doc-ul">
+              <li>
+                Amateur radio image transmission during regular contacts or contests
+              </li>
+              <li>
+                Reception of commemorative or scientific images from the International
+                Space Station
+              </li>
+              <li>
+                Hands-on learning tool for signal processing and modulation techniques
+              </li>
+              <li>
+                Forensic audio and image recovery in security and research contexts
+              </li>
+              <li>
+                Remote communication in disaster scenarios where text or image data
+                must be exchanged over voice channels
+              </li>
+            </ul>
+          </section>
+
+          <section id="modern-tools" class="seo-doc-section">
+            <h3 class="seo-doc-h3">Modern SSTV Decoding Tools</h3>
+            <p>
+              SSTV decoding used to rely on desktop applications such as
+              <strong>MMSSTV</strong> and <strong>RX-SSTV</strong>, typically
+              available for Windows operating systems. Today, advancements in web
+              technologies allow users to decode SSTV transmissions directly in their
+              browser using <strong>JavaScript</strong> and the
+              <strong>Web Audio API</strong>. This provides cross-platform access and
+              eliminates the need for software installation, making SSTV more
+              accessible to beginners, educators, and hobbyists.
+            </p>
+            <p>
+              This web-based <strong>SSTV Decoder</strong> is inspired by the
+              open-source project
+              <a
+                href="https://github.com/colaclanth/sstv"
+                class="seo-doc-a"
+                target="_blank"
+                rel="nofollow noopener"
+                >sstv on GitHub</a
+              >, which implements image decoding in Python. For mobile users and
+              offline decoding, the following applications are also recommended:
+            </p>
+            <ul class="seo-doc-ul">
+              <li>
+                <strong>SSTV Decoder (Android)</strong>: Decode SSTV signals using
+                your phone’s microphone or audio input -
+                <a
+                  href="https://play.google.com/store/apps/details?id=xdsopl.robot36"
+                  class="seo-doc-a"
+                  target="_blank"
+                  rel="nofollow noopener"
+                  >Robot36 on Google Play</a
+                >
+              </li>
+              <li>
+                <strong>SSTV Encoder (Android)</strong>: Generate and transmit SSTV
+                signals using image files -
+                <a
+                  href="https://play.google.com/store/apps/details?id=om.sstvencoder"
+                  class="seo-doc-a"
+                  target="_blank"
+                  rel="nofollow noopener"
+                  >SSTV Encoder on Google Play</a
+                >
+              </li>
+            </ul>
+            <p>
+              These tools support various SSTV modes and are ideal for field
+              experiments, portable ham radio setups, and educational activities.
+            </p>
+          </section>
+
+          <section id="conclusion" class="seo-doc-section">
+            <h3 class="seo-doc-h3">Conclusion</h3>
+            <p>
+              SSTV remains a unique and engaging method of communication, blending
+              audio engineering with image processing. Whether used for hobby
+              purposes, scientific outreach, or technical education, SSTV provides a
+              hands-on way to explore the fundamentals of analog communication. With
+              modern digital tools, decoding SSTV transmissions has become more
+              accessible than ever, helping preserve and expand this historic radio
+              tradition.
+            </p>
+          </section>
+
+          <section id="frequently-asked-questions" class="seo-doc-section">
+            <h3 class="seo-doc-h3">Frequently Asked Questions about SSTV</h3>
+
+            <h4 class="seo-doc-faq-q">What is SSTV and how does it work?</h4>
+            <p class="seo-doc-faq-a">
+              SSTV, or Slow Scan Television, is a method of sending still images over
+              audio frequencies. It works by encoding each line of the image as a
+              sequence of tones, which can be transmitted via radio and decoded back
+              into a picture using software or hardware tools.
+            </p>
+
+            <h4 class="seo-doc-faq-q">Can I decode SSTV signals directly in my browser?</h4>
+            <p class="seo-doc-faq-a">
+              Yes. With modern web technologies such as the Web Audio API and
+              JavaScript, you can decode SSTV audio recordings in real time within
+              your browser. This website provides a cross-platform tool for decoding
+              common SSTV formats like Robot36, Scottie1, and Martin1.
+            </p>
+
+            <h4 class="seo-doc-faq-q">What types of files can I use to decode an SSTV image?</h4>
+            <p class="seo-doc-faq-a">
+              You can upload most common audio file formats, such as WAV, MP3, or OGG.
+              Ensure the recording is clear and has minimal background noise for
+              accurate decoding.
+            </p>
+
+            <h4 class="seo-doc-faq-q">What are the most common SSTV modes?</h4>
+            <p class="seo-doc-faq-a">
+              Popular SSTV modes include Robot36, Scottie1, Martin1 and ScottieSDX.
+              Each mode differs in resolution, color format, and transmission time.
+              This decoder supports a wide variety of these formats automatically by
+              detecting the VIS code.
+            </p>
+
+            <h4 class="seo-doc-faq-q">Do I need a license to transmit SSTV signals?</h4>
+            <p class="seo-doc-faq-a">
+              Yes. Transmitting SSTV over radio frequencies generally requires an
+              amateur radio license, depending on your country’s regulations.
+              Receiving and decoding SSTV transmissions, however, is legal and
+              unrestricted in most regions.
+            </p>
+          </section>
+
+          <section id="connect-with-mathieu" class="seo-doc-section">
+            <h3 class="seo-doc-h3">Connect with Mathieu Renaud</h3>
+            <p>You can find more about me and follow my work here:</p>
+            <ul class="seo-doc-ul">
+              <li>
+                <strong>Website</strong>:
+                <a
+                  href="https://resume.mathieurenaud.fr"
+                  class="seo-doc-a"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >https://resume.mathieurenaud.fr</a
+                >
+              </li>
+              <li>
+                <strong>GitHub</strong>:
+                <a
+                  href="https://github.com/Equinoxis"
+                  class="seo-doc-a"
+                  target="_blank"
+                  rel="nofollow noopener"
+                  >https://github.com/Equinoxis</a
+                >
+              </li>
+              <li>
+                <strong>LinkedIn</strong>:
+                <a
+                  href="https://www.linkedin.com/in/mathieu-renaud-inge"
+                  class="seo-doc-a"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >https://www.linkedin.com/in/mathieu-renaud-inge</a
+                >
+              </li>
+            </ul>
+            <p>
+              View the source code of this SSTV Decoder on GitHub:
+              <a
+                href="https://github.com/Equinoxis/sstv-decoder"
+                class="seo-doc-a"
+                target="_blank"
+                rel="nofollow noopener"
+                >https://github.com/Equinoxis/sstv-decoder</a
+              >
+            </p>
+          </section>
+        </div>
+      </article>
+
+      <footer
+        class="mt-10 border-t border-app-border pt-5 text-sm text-app-muted"
+        aria-label="Author and links"
+      >
+        <p class="leading-relaxed">
+          Connect with
+          <strong class="font-medium text-app-text">Mathieu Renaud</strong>
+          <span class="text-app-border-strong"> · </span>
           <a
-            target="_blank"
-            rel="noopener"
-            href="https://www.linkedin.com/in/mathieu-renaud-inge/"
+            href="https://resume.mathieurenaud.fr"
+            class="text-app-accent underline decoration-app-accent/30 underline-offset-2 transition-colors hover:text-app-accent-hover"
+            rel="noopener noreferrer"
+            >Website</a
           >
-            Contact-me.
-          </a>
-        </p>
-      </div>
-    </main>
-
-    <section class="theory-section content">
-      <h2>
-        Understand <strong>Slow Scan Television (SSTV)</strong> and <br />
-        How to <strong>Decode SSTV Images</strong>
-      </h2>
-
-      <p>
-        <strong>Slow Scan Television</strong>, abbreviated as
-        <strong>SSTV</strong>, is a technique used to transmit static images
-        over narrowband radio frequencies. It is widely used by
-        <strong>amateur radio operators</strong> and space agencies due to its
-        efficiency in sending visual data using minimal bandwidth. Unlike
-        traditional video transmission, which requires high data rates, SSTV
-        sends images line by line as modulated audio tones, making it ideal for
-        long-distance and low-power communications.
-      </p>
-
-      <p>
-        SSTV was initially developed in the 1950s for military and scientific
-        use. Over time, it became a popular tool among radio amateurs,
-        especially for communicating during emergencies, engaging in hobby
-        activities, and receiving images from space missions, including
-        broadcasts from the <strong>International Space Station</strong>. The
-        audio signal, once recorded or received live, can be decoded back into a
-        visual image using this <strong>SSTV Decoder</strong>.
-      </p>
-
-      <h3>SSTV Signal Structure</h3>
-      <p>
-        An SSTV transmission follows a structured format that enables precise
-        decoding. It typically includes the following components:
-      </p>
-      <ul>
-        <li>
-          <strong>Leader tone</strong>: A continuous high-frequency tone,
-          usually around 1900 Hz, that prepares the decoder for synchronization.
-        </li>
-        <li>
-          <strong>Break signal</strong>: A brief lower-frequency tone, around
-          1200 Hz, that indicates the end of the leader tone.
-        </li>
-        <li>
-          <strong>VIS code</strong>: A set of tones encoding the mode used,
-          allowing the decoder to interpret the image structure correctly.
-        </li>
-        <li>
-          <strong>Synchronization pulses</strong>: Regular tones marking the
-          beginning of each line or channel within the image.
-        </li>
-        <li>
-          <strong>Image scan lines</strong>: The core of the transmission, where
-          each pixel's brightness or color is represented by an audio frequency.
-        </li>
-      </ul>
-
-      <h3>Common SSTV Modes</h3>
-      <p>
-        SSTV supports various transmission modes, each designed to balance image
-        resolution, transmission speed, and audio bandwidth. Some of the most
-        widely used modes are listed below:
-      </p>
-      <table class="encoding-table">
-        <thead>
-          <tr>
-            <th>Mode</th>
-            <th>Resolution</th>
-            <th>Transmission Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Robot36</td>
-            <td>320 by 240</td>
-            <td>~ 36 seconds</td>
-          </tr>
-          <tr>
-            <td>Scottie1</td>
-            <td>320 by 256</td>
-            <td>~ 110 seconds</td>
-          </tr>
-          <tr>
-            <td>Martin1</td>
-            <td>320 by 256</td>
-            <td>~ 114 seconds</td>
-          </tr>
-          <tr>
-            <td>Robot72</td>
-            <td>320 by 240</td>
-            <td>~ 72 seconds</td>
-          </tr>
-          <tr>
-            <td>Martin2</td>
-            <td>320 by 256</td>
-            <td>~ 58 seconds</td>
-          </tr>
-          <tr>
-            <td>Scottie2</td>
-            <td>320 by 256</td>
-            <td>~ 71 seconds</td>
-          </tr>
-          <tr>
-            <td>ScottieSDX</td>
-            <td>640 by 496</td>
-            <td>~ 539 seconds</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h3>Decoding Process</h3>
-      <p>
-        Decoding an SSTV signal involves converting the received audio tones
-        into pixel data. The process generally includes the following steps:
-      </p>
-      <ol>
-        <li>
-          Identify and extract the VIS header to determine the SSTV mode used
-          for encoding.
-        </li>
-        <li>
-          Use the leader tone and sync pulses to align the decoding process with
-          the signal timing.
-        </li>
-        <li>
-          Perform a Fast Fourier Transform, or FFT, on each time window to
-          measure the dominant frequency.
-        </li>
-        <li>
-          Translate each frequency value into a luminance or color channel
-          intensity for the corresponding pixel.
-        </li>
-        <li>
-          Assemble the pixels line by line to reconstruct the final image on the
-          display.
-        </li>
-      </ol>
-
-      <h3>Technical Characteristics</h3>
-      <p>
-        SSTV signals operate within the audio frequency range, typically between
-        1500 and 2300 Hz. Each color or brightness value is transmitted by
-        holding a specific frequency for a short duration. In color modes like
-        YUV, three separate channels are used: Y for brightness, U and V for
-        color difference components.
-      </p>
-      <p>
-        Synchronization tones are critical for reliable decoding. These tones
-        ensure that the decoder remains aligned with the image structure
-        throughout the transmission. Without correct synchronization, the
-        decoded image may appear distorted, offset, or scrambled.
-      </p>
-
-      <h3>Use Cases and Practical Applications</h3>
-      <ul>
-        <li>
-          Amateur radio image transmission during regular contacts or contests
-        </li>
-        <li>
-          Reception of commemorative or scientific images from the International
-          Space Station
-        </li>
-        <li>
-          Hands-on learning tool for signal processing and modulation techniques
-        </li>
-        <li>
-          Forensic audio and image recovery in security and research contexts
-        </li>
-        <li>
-          Remote communication in disaster scenarios where text or image data
-          must be exchanged over voice channels
-        </li>
-      </ul>
-
-      <h3>Modern SSTV Decoding Tools</h3>
-      <p>
-        SSTV decoding used to rely on desktop applications such as
-        <strong>MMSSTV</strong> and <strong>RX-SSTV</strong>, typically
-        available for Windows operating systems. Today, advancements in web
-        technologies allow users to decode SSTV transmissions directly in their
-        browser using <strong>JavaScript</strong> and the
-        <strong>Web Audio API</strong>. This provides cross-platform access and
-        eliminates the need for software installation, making SSTV more
-        accessible to beginners, educators, and hobbyists.
-      </p>
-      <p>
-        This web-based <strong>SSTV Decoder</strong> is inspired by the
-        open-source project
-        <a
-          href="https://github.com/colaclanth/sstv"
-          target="_blank"
-          rel="nofollow noopener"
-          >sstv on GitHub</a
-        >, which implements image decoding in Python. For mobile users and
-        offline decoding, the following applications are also recommended:
-      </p>
-      <ul>
-        <li>
-          <strong>SSTV Decoder (Android)</strong>: Decode SSTV signals using
-          your phone’s microphone or audio input -
-          <a
-            href="https://play.google.com/store/apps/details?id=xdsopl.robot36"
-            target="_blank"
-            rel="nofollow noopener"
-            >Robot36 on Google Play</a
-          >
-        </li>
-        <li>
-          <strong>SSTV Encoder (Android)</strong>: Generate and transmit SSTV
-          signals using image files -
-          <a
-            href="https://play.google.com/store/apps/details?id=om.sstvencoder"
-            target="_blank"
-            rel="nofollow noopener"
-            >SSTV Encoder on Google Play</a
-          >
-        </li>
-      </ul>
-      <p>
-        These tools support various SSTV modes and are ideal for field
-        experiments, portable ham radio setups, and educational activities.
-      </p>
-
-      <h3>Conclusion</h3>
-      <p>
-        SSTV remains a unique and engaging method of communication, blending
-        audio engineering with image processing. Whether used for hobby
-        purposes, scientific outreach, or technical education, SSTV provides a
-        hands-on way to explore the fundamentals of analog communication. With
-        modern digital tools, decoding SSTV transmissions has become more
-        accessible than ever, helping preserve and expand this historic radio
-        tradition.
-      </p>
-    </section>
-
-    <section class="faq-section content">
-      <h2>Frequently Asked Questions about SSTV</h2>
-
-      <h3>What is SSTV and how does it work?</h3>
-      <p>
-        SSTV, or Slow Scan Television, is a method of sending still images over
-        audio frequencies. It works by encoding each line of the image as a
-        sequence of tones, which can be transmitted via radio and decoded back
-        into a picture using software or hardware tools.
-      </p>
-
-      <h3>Can I decode SSTV signals directly in my browser?</h3>
-      <p>
-        Yes. With modern web technologies such as the Web Audio API and
-        JavaScript, you can decode SSTV audio recordings in real time within
-        your browser. This website provides a cross-platform tool for decoding
-        common SSTV formats like Robot36, Scottie1, and Martin1.
-      </p>
-
-      <h3>What types of files can I use to decode an SSTV image?</h3>
-      <p>
-        You can upload most common audio file formats, such as WAV, MP3, or OGG.
-        Ensure the recording is clear and has minimal background noise for
-        accurate decoding.
-      </p>
-
-      <h3>What are the most common SSTV modes?</h3>
-      <p>
-        Popular SSTV modes include Robot36, Scottie1, Martin1 and ScottieSDX.
-        Each mode differs in resolution, color format, and transmission time.
-        This decoder supports a wide variety of these formats automatically by
-        detecting the VIS code.
-      </p>
-
-      <h3>Do I need a license to transmit SSTV signals?</h3>
-      <p>
-        Yes. Transmitting SSTV over radio frequencies generally requires an
-        amateur radio license, depending on your country’s regulations.
-        Receiving and decoding SSTV transmissions, however, is legal and
-        unrestricted in most regions.
-      </p>
-    </section>
-
-    <section class="social-section content">
-      <h2>Connect with Mathieu Renaud</h2>
-      <p>You can find more about me and follow my work here:</p>
-      <ul>
-        <li>
-          <strong>Website</strong>:
-          <a href="https://resume.mathieurenaud.fr" target="_blank"
-            >https://resume.mathieurenaud.fr</a
-          >
-        </li>
-        <li>
-          <strong>GitHub</strong>:
+          <span class="text-app-border-strong"> · </span>
           <a
             href="https://github.com/Equinoxis"
-            target="_blank"
-            rel="nofollow noopener"
-            >https://github.com/Equinoxis</a
+            class="text-app-accent underline decoration-app-accent/30 underline-offset-2 transition-colors hover:text-app-accent-hover"
+            rel="noopener noreferrer"
+            >GitHub</a
           >
-        </li>
-        <li>
-          <strong>LinkedIn</strong>:
+          <span class="text-app-border-strong"> · </span>
           <a
             href="https://www.linkedin.com/in/mathieu-renaud-inge"
-            target="_blank"
-            rel="noopener"
-            >https://www.linkedin.com/in/mathieu-renaud-inge</a
+            class="text-app-accent underline decoration-app-accent/30 underline-offset-2 transition-colors hover:text-app-accent-hover"
+            rel="noopener noreferrer"
+            >LinkedIn</a
           >
-        </li>
-      </ul>
+          <span class="text-app-border-strong"> · </span>
+          <button
+            type="button"
+            data-cc="show-preferencesModal"
+            class="cursor-pointer border-0 bg-transparent p-0 text-app-accent underline decoration-app-accent/30 underline-offset-2 transition-colors hover:text-app-accent-hover"
+          >
+            Cookie settings
+          </button>
+        </p>
+      </footer>
+    </div>
 
-      <p>
-        View the source code of this SSTV Decoder on GitHub:
-        <a
-          href="https://github.com/Equinoxis/sstv-decoder"
-          target="_blank"
-          rel="nofollow noopener"
-          >https://github.com/Equinoxis/sstv-decoder</a
-        >
-      </p>
-    </section>
+    <script type="module" src="/src/main.js"></script>
 
-    <!-- Start Ko-fi banner -->
     <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
     <script>
       kofiWidgetOverlay.draw("equinoxis", {
@@ -556,6 +762,20 @@
         "floating-chat.donateButton.text-color": "#323842",
       });
     </script>
-    <!-- End Ko-fi banner -->
+    <style>
+      .floatingchat-container-wrap,
+      .floatingchat-container-wrap-mobi {
+        left: unset;
+        right: 16px;
+      }
+      .floatingchat-container-wrap-mobi {
+        width: 50%;
+      }
+      .floating-chat-kofi-popup-iframe,
+      .floating-chat-kofi-popup-iframe-mobi {
+        left: unset;
+        right: 16px;
+      }
+    </style>
   </body>
 </html>

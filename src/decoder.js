@@ -1,3 +1,5 @@
+import DecoderWorker from "./worker/decoder.js?worker";
+
 const audioInput = document.getElementById("audioInput");
 const dropZone = document.getElementById("dropZone");
 const audioFileNameDisplay = document.getElementById("audioFileNameDisplay");
@@ -8,13 +10,12 @@ const decodeButton = document.getElementById("decodeButton");
 const downloadImageButton = document.getElementById("downloadImageButton");
 const feedbackCard = document.getElementById("feedbackCard");
 const errorMessage = document.getElementById("errorMessage");
+const decodeProgress = document.getElementById("decodeProgress");
 
 let currentSamples = null;
 let currentSampleRate = null;
 let lastDecodedImage = null;
-let decoderWorker = new Worker("/scripts/worker/decoder.js", {
-  type: "module",
-});
+const decoderWorker = new DecoderWorker();
 
 decodeButton.disabled = true;
 canvas.style.display = "none";
@@ -43,7 +44,7 @@ dropZone.addEventListener("drop", (event) => {
 });
 
 function handleAudioFile(file) {
-  audioFileNameDisplay.innerHTML = `Selected File: <span style="color: #37a33dff; font-weight: bold; font-size: 1rem;">${file.name}</span>`;
+  audioFileNameDisplay.innerHTML = `Selected file: <span class="font-medium text-app-accent">${file.name}</span>`;
   const reader = new FileReader();
 
   reader.onload = async () => {
@@ -70,7 +71,7 @@ decodeButton.addEventListener("click", () => {
 
   decodeButton.disabled = true;
 
-  const fftQuality = parseInt(qualitySelect.value);
+  const fftQuality = parseInt(qualitySelect.value, 10);
 
   decoderWorker.postMessage({
     samples: currentSamples,
@@ -91,9 +92,7 @@ decoderWorker.onmessage = (event) => {
   decodeProgress.style.display = "none";
 
   if (error) {
-    const errorMessage = document.getElementById("errorMessage");
-
-    errorMessage.innerHTML = `Error: ${error.message}`;
+    errorMessage.textContent = `Error: ${error.message}`;
     errorMessage.style.display = "block";
 
     canvas.style.display = "none";
@@ -114,7 +113,7 @@ decoderWorker.onmessage = (event) => {
   lastDecodedImage = imgData;
   ctx.putImageData(imgData, 0, 0);
   canvas.style.display = "block";
-  downloadImageButton.style.display = "block";
+  downloadImageButton.style.display = "inline-flex";
   feedbackCard.style.display = "block";
 
   decodeButton.disabled = false;
