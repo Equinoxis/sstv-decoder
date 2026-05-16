@@ -840,13 +840,6 @@
 	border: 0;
 }
 
-.pswp .pswp__button--delete-decode {
-	color: #fff;
-}
-
-.pswp .pswp__button--delete-decode:hover {
-	color: #fca5a5;
-}
 
 @keyframes decode-gallery-in {
 	from {

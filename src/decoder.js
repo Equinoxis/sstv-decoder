@@ -315,10 +315,34 @@ function updateHistoryChrome() {
   }
 }
 
+async function downloadDecodedEntry(entry) {
+  if (!entry) return;
+
+  const blob =
+    entry.blob ??
+    (entry === getLatestEntry()
+      ? await imageDataToPngBlob(await ensureLatestImageData())
+      : null);
+  if (!blob) return;
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = entry.sourceFileName
+    ? getDecodedImageDownloadName(entry.sourceFileName)
+    : "SSTV decoded.png";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 function openGalleryAt(index) {
   openDecodeGallery(decodedImages, index, {
     onDeleteImage: (id) => {
       removeDecodedImage(id);
+    },
+    onDownloadImage: (id) => {
+      const entry = decodedImages.find((item) => item.id === id);
+      downloadDecodedEntry(entry);
     },
   });
 }
@@ -865,20 +889,6 @@ decoderWorker.onerror = (e) => {
   console.error("Worker error:", e.message, e);
 };
 
-downloadImageButton.addEventListener("click", async () => {
-  const latest = getLatestEntry();
-  if (!latest) return;
-
-  const blob =
-    latest.blob ??
-    (await imageDataToPngBlob(await ensureLatestImageData()));
-
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = latest.sourceFileName
-    ? getDecodedImageDownloadName(latest.sourceFileName)
-    : "SSTV decoded.png";
-  a.click();
-  URL.revokeObjectURL(url);
+downloadImageButton.addEventListener("click", () => {
+  downloadDecodedEntry(getLatestEntry());
 });
