@@ -249,7 +249,7 @@ function removeEvictedFromMemory(evictedIds) {
 }
 
 function getLatestEntry() {
-  return decodedImages[decodedImages.length - 1] ?? null;
+  return decodedImages[0] ?? null;
 }
 
 async function ensureLatestImageData() {
@@ -381,13 +381,13 @@ function createDeleteIconSvg() {
 function renderDecodeGallery() {
   if (!decodeGalleryList) return;
 
-  const archived = decodedImages.slice(0, -1);
+  const previous = decodedImages.slice(1);
   decodeGalleryList.replaceChildren();
 
-  for (let i = 0; i < archived.length; i++) {
-    const entry = archived[i];
-    const decodeIndex = i;
-    const decodeNumber = i + 1;
+  for (let i = 0; i < previous.length; i++) {
+    const entry = previous[i];
+    const decodeIndex = i + 1;
+    const decodeNumber = decodedImages.length - i - 1;
 
     const li = document.createElement("li");
     li.className = "decode-gallery__item";
@@ -440,7 +440,7 @@ function renderDecodeGallery() {
     decodeGalleryList.append(li);
   }
 
-  decodeGalleryList.scrollLeft = decodeGalleryList.scrollWidth;
+  decodeGalleryList.scrollLeft = 0;
 }
 
 window.addEventListener("beforeunload", revokeAllDecodedImages);
@@ -451,13 +451,13 @@ clearDecodeHistoryBtn?.addEventListener("click", () => {
 
 sstvCanvasOpen?.addEventListener("click", () => {
   if (!decodedImages.length) return;
-  openGalleryAt(decodedImages.length - 1);
+  openGalleryAt(0);
 });
 
 async function initDecodeHistory() {
   try {
     const records = await loadAll();
-    for (const record of records) {
+    for (const record of [...records].reverse()) {
       decodedImages.push({
         id: record.id,
         width: record.width,
@@ -789,7 +789,7 @@ decoderWorker.onmessage = (event) => {
         const id = crypto.randomUUID();
         const createdAt = Date.now();
 
-        decodedImages.push({
+        decodedImages.unshift({
           id,
           imageData: imgData,
           width,
