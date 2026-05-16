@@ -11,7 +11,7 @@
 - Multiple SSTV modes: Robot36, Scottie1, Martin1, ScottieDX, etc.
 - Visual decoding progress and canvas rendering
 - Configurable FFT resolution (quality vs speed)
-- Fully client-side — no server upload
+- Fully client-side - no server upload
 
 ## Live Demo
 
@@ -21,13 +21,13 @@ Sample audio: [test.mp3](https://sstv-decoder.mathieurenaud.fr/assets/test.mp3)
 
 ## Technologies
 
-- **Vite** — dev server and production build
-- **Tailwind CSS v4** — layout and design tokens (htaccess-generator style system)
-- **JavaScript** — decoding logic and UI
-- **Web Audio API** — audio analysis
-- **FFT + barycentric interpolation** — frequency detection
-- **HTML5 Canvas** — image output
-- **Web Workers** — decode off the main thread
+- **Vite** - dev server and production build
+- **Tailwind CSS v4** - layout and design tokens (htaccess-generator style system)
+- **JavaScript** - decoding logic and UI
+- **Web Audio API** - audio analysis
+- **FFT + barycentric interpolation** - frequency detection
+- **HTML5 Canvas** - image output
+- **Web Workers** - decode off the main thread
 
 ## Development
 
@@ -65,10 +65,10 @@ Deploy the contents of **`dist/`** to your static host (site root at `sstv-decod
 
 ## License
 
-MIT — see [LICENSE](https://github.com/Equinoxis/sstv-decoder/blob/main/LICENSE).
+MIT - see [LICENSE](https://github.com/Equinoxis/sstv-decoder/blob/main/LICENSE).
 
 ## Author
 
-**Mathieu Renaud** — [Website](https://resume.mathieurenaud.fr) · [GitHub](https://github.com/Equinoxis) · [LinkedIn](https://www.linkedin.com/in/mathieu-renaud-inge)
+**Mathieu Renaud** - [Website](https://mathieurenaud.fr) · [GitHub](https://github.com/Equinoxis) · [LinkedIn](https://www.linkedin.com/in/mathieu-renaud-inge)
 
 Repository: [github.com/Equinoxis/sstv-decoder](https://github.com/Equinoxis/sstv-decoder)
