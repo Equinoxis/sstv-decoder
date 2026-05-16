@@ -444,3 +444,130 @@
 	cursor: not-allowed;
 	transform: none;
 }
+
+/* Off-screen decoded image scroll hint */
+.scroll-hint {
+	--scroll-hint-duration: 5.5s;
+	position: fixed;
+	bottom: 1.25rem;
+	left: 50%;
+	z-index: 40;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	width: max-content;
+	max-width: min(calc(100vw - 2rem), 20rem);
+	border-radius: 9999px;
+	border: 1px solid color-mix(in srgb, var(--app-accent) 32%, var(--app-border-strong));
+	background: color-mix(in srgb, var(--app-accent) 8%, var(--app-surface));
+	box-shadow:
+		0 4px 24px color-mix(in srgb, var(--app-bg) 55%, transparent),
+		0 1px 0 color-mix(in srgb, var(--app-accent) 12%, transparent) inset;
+	opacity: 0;
+	transform: translateX(-50%) translateY(0.5rem);
+	pointer-events: none;
+	transition:
+		opacity 0.3s ease-out,
+		transform 0.3s ease-out;
+}
+
+.scroll-hint[hidden] {
+	display: none;
+}
+
+.scroll-hint--visible {
+	opacity: 1;
+	transform: translateX(-50%) translateY(0);
+	pointer-events: auto;
+}
+
+.scroll-hint--leaving {
+	opacity: 0;
+	transform: translateX(-50%) translateY(0.5rem);
+	pointer-events: none;
+	transition:
+		opacity 0.28s ease-in,
+		transform 0.28s ease-in;
+}
+
+.scroll-hint__btn {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.65rem 1.1rem 0.7rem;
+	border: 0;
+	background: transparent;
+	font-family: inherit;
+	font-size: 0.875rem;
+	font-weight: 600;
+	line-height: 1.25;
+	color: var(--app-text);
+	cursor: pointer;
+	transition: color 0.15s ease;
+}
+
+.scroll-hint__btn:hover {
+	color: var(--app-accent);
+}
+
+.scroll-hint__btn:focus-visible {
+	outline: 2px solid var(--app-accent);
+	outline-offset: 2px;
+	border-radius: 9999px;
+}
+
+.scroll-hint__icon {
+	flex-shrink: 0;
+	color: var(--app-accent);
+	transition: transform 0.25s ease;
+}
+
+.scroll-hint--down .scroll-hint__icon {
+	transform: rotate(180deg);
+}
+
+.scroll-hint__label {
+	white-space: nowrap;
+}
+
+.scroll-hint__progress {
+	display: block;
+	height: 2px;
+	background: var(--app-accent);
+	transform: scaleX(1);
+	transform-origin: left center;
+}
+
+.scroll-hint--visible .scroll-hint__progress {
+	animation: scroll-hint-progress var(--scroll-hint-duration) linear forwards;
+}
+
+@keyframes scroll-hint-progress {
+	from {
+		transform: scaleX(1);
+	}
+
+	to {
+		transform: scaleX(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.scroll-hint {
+		--scroll-hint-duration: 3s;
+		transition: opacity 0.15s ease;
+		transform: translateX(-50%);
+	}
+
+	.scroll-hint--visible {
+		transform: translateX(-50%);
+	}
+
+	.scroll-hint--leaving {
+		transform: translateX(-50%);
+	}
+
+	.scroll-hint--visible .scroll-hint__progress {
+		animation-duration: var(--scroll-hint-duration);
+	}
+}

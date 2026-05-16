@@ -821,6 +821,40 @@
       </footer>
     </div>
 
+    <div
+      id="imageScrollHint"
+      class="scroll-hint"
+      role="status"
+      aria-live="polite"
+      hidden
+    >
+      <button
+        type="button"
+        id="imageScrollHintBtn"
+        class="scroll-hint__btn"
+        aria-label="Scroll to decoded image"
+      >
+        <svg
+          class="scroll-hint__icon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.25"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M12 19V5" />
+          <path d="m5 12 7-7 7 7" />
+        </svg>
+        <span class="scroll-hint__label">View decoded image</span>
+      </button>
+      <span class="scroll-hint__progress" aria-hidden="true"></span>
+    </div>
+
     <script type="module" src="/src/main.js"></script>
 
     <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
