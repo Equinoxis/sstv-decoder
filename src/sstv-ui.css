@@ -551,6 +551,28 @@
 	text-align: left;
 }
 
+.error-message__text {
+	display: block;
+}
+
+.error-message__contact {
+	display: block;
+	margin-top: 0.5rem;
+	font-size: 0.8125rem;
+	font-weight: 400;
+	color: color-mix(in srgb, var(--app-danger) 70%, var(--app-muted));
+}
+
+.error-message__contact a {
+	color: var(--app-accent);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+.error-message__contact a:hover {
+	color: var(--app-accent-hover);
+}
+
 .sstv-canvas-wrap {
 	--sstv-canvas-duration: 0.5s;
 	display: grid;

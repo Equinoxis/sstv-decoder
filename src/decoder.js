@@ -21,6 +21,26 @@ const decodeButton = document.getElementById("decodeButton");
 const downloadImageButton = document.getElementById("downloadImageButton");
 const feedbackCard = document.getElementById("feedbackCard");
 const errorMessage = document.getElementById("errorMessage");
+const CONTACT_URL = "https://www.linkedin.com/in/mathieu-renaud-inge/";
+
+function escapeHtml(text) {
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function showErrorMessage(message) {
+  errorMessage.innerHTML = `<span class="error-message__text">${escapeHtml(message)}</span><span class="error-message__contact">If you think this should work, feel free to <a href="${CONTACT_URL}" target="_blank" rel="noopener noreferrer">contact me</a>.</span>`;
+  errorMessage.style.display = "block";
+}
+
+function hideErrorMessage() {
+  errorMessage.style.display = "none";
+  errorMessage.textContent = "";
+}
 const decodeProgressSlot = document.getElementById("decodeProgressSlot");
 const decodeProgress = document.getElementById("decodeProgress");
 const decodeProgressFill = decodeProgress?.querySelector(".decode-progress__fill");
@@ -739,7 +759,7 @@ decodeButton.addEventListener("click", () => {
   if (!currentSamples || !currentSampleRate || !decodeHistoryReady) return;
 
   decodeButton.disabled = true;
-  errorMessage.style.display = "none";
+  hideErrorMessage();
   showDecodeProgress({ reset: true });
 
   const fftQuality = parseInt(qualitySelect.value, 10);
@@ -765,8 +785,7 @@ decoderWorker.onmessage = (event) => {
       onComplete: () => {
         hideImageScrollHint({ immediate: true });
 
-        errorMessage.textContent = `Error: ${error.message}`;
-        errorMessage.style.display = "block";
+        showErrorMessage(`Error: ${error.message}`);
 
         updateHistoryChrome();
         decodeButton.disabled = !decodeHistoryReady;
@@ -811,8 +830,7 @@ decoderWorker.onmessage = (event) => {
         removeEvictedFromMemory(evictedIds);
 
         if (saveError) {
-          errorMessage.textContent = saveError;
-          errorMessage.style.display = "block";
+          showErrorMessage(saveError);
         }
 
         const isFirstReveal = !sstvCanvasWrap?.classList.contains(
@@ -835,8 +853,7 @@ decoderWorker.onmessage = (event) => {
         });
       } catch (err) {
         console.error("Failed to prepare decoded image:", err);
-        errorMessage.textContent = "Error: Failed to display decoded image.";
-        errorMessage.style.display = "block";
+        showErrorMessage("Error: Failed to display decoded image.");
       }
 
       decodeButton.disabled = false;
