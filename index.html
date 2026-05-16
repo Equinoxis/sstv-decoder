@@ -260,12 +260,6 @@
             </p>
           </div>
 
-          <label for="audioInput" class="file-drop-zone" id="dropZone">
-            <p>Drag &amp; drop an audio file or click to upload</p>
-            <input type="file" id="audioInput" accept="audio/*" hidden />
-            <p class="filename" id="audioFileNameDisplay">No file selected</p>
-          </label>
-
           <div class="sstv-quality-field" id="quality-field">
             <label for="qualitySelect" class="sstv-quality-field__label"
               >FFT quality</label
@@ -300,6 +294,76 @@
               Balanced — good speed and accuracy for most recordings.
             </p>
           </div>
+
+          <label
+            for="audioInput"
+            class="file-drop-zone"
+            id="dropZone"
+            aria-describedby="audioFileNameDisplay"
+          >
+            <span class="file-drop-zone__icon" aria-hidden="true">
+              <svg
+                class="file-drop-zone__wave"
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <rect
+                  class="file-drop-zone__bar"
+                  x="2.5"
+                  y="9"
+                  width="2.25"
+                  height="6"
+                  rx="1.125"
+                />
+                <rect
+                  class="file-drop-zone__bar"
+                  x="6.375"
+                  y="6"
+                  width="2.25"
+                  height="12"
+                  rx="1.125"
+                />
+                <rect
+                  class="file-drop-zone__bar"
+                  x="10.875"
+                  y="3"
+                  width="2.25"
+                  height="18"
+                  rx="1.125"
+                />
+                <rect
+                  class="file-drop-zone__bar"
+                  x="15.375"
+                  y="6"
+                  width="2.25"
+                  height="12"
+                  rx="1.125"
+                />
+                <rect
+                  class="file-drop-zone__bar"
+                  x="19.875"
+                  y="9"
+                  width="2.25"
+                  height="6"
+                  rx="1.125"
+                />
+              </svg>
+            </span>
+            <span class="file-drop-zone__title"
+              >Drop your SSTV audio here</span
+            >
+            <span class="file-drop-zone__hint"
+              >or click to browse · WAV, MP3, OGG, and more</span
+            >
+            <input type="file" id="audioInput" accept="audio/*" hidden />
+            <p class="file-drop-zone__filename" id="audioFileNameDisplay">
+              No file selected
+            </p>
+          </label>
 
           <div class="flex flex-wrap items-center justify-center gap-3">
             <button type="button" id="decodeButton" class="app-btn-primary">

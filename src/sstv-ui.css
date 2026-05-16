@@ -6,33 +6,173 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	gap: 0.5rem;
-	padding: 1.75rem 1rem;
-	border: 2px dashed var(--app-border-strong);
+	gap: 0.25rem;
+	padding: 1.75rem 1.25rem 1.25rem;
+	border: 2px dashed color-mix(in srgb, var(--app-accent) 32%, var(--app-border-strong));
+	border-left: 3px solid var(--app-accent);
 	border-radius: 0.75rem;
-	background: color-mix(in srgb, var(--app-surface-input) 80%, transparent);
+	background:
+		radial-gradient(
+			ellipse 90% 70% at 50% -10%,
+			var(--app-glow-soft),
+			transparent 65%
+		),
+		color-mix(in srgb, var(--app-accent) 5%, var(--app-surface-input));
+	box-shadow: inset 0 1px 0 color-mix(in srgb, var(--app-accent) 10%, transparent);
 	text-align: center;
-	font-size: 0.9375rem;
-	font-weight: 500;
-	color: var(--app-muted);
 	cursor: pointer;
 	transition:
 		border-color 0.2s ease,
 		background-color 0.2s ease,
-		color 0.2s ease;
+		box-shadow 0.2s ease,
+		transform 0.15s ease;
+}
+
+.file-drop-zone__icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 3.25rem;
+	height: 3.25rem;
+	margin-bottom: 0.35rem;
+	border-radius: 9999px;
+	background: color-mix(in srgb, var(--app-accent) 14%, transparent);
+	color: var(--app-accent);
+	transition:
+		background-color 0.2s ease,
+		transform 0.15s ease;
+}
+
+.file-drop-zone__wave {
+	display: block;
+}
+
+.file-drop-zone__bar {
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: file-drop-zone-bar 1.15s ease-in-out infinite;
+}
+
+.file-drop-zone__bar:nth-child(1) {
+	animation-delay: 0s;
+}
+
+.file-drop-zone__bar:nth-child(2) {
+	animation-delay: 0.12s;
+}
+
+.file-drop-zone__bar:nth-child(3) {
+	animation-delay: 0.24s;
+}
+
+.file-drop-zone__bar:nth-child(4) {
+	animation-delay: 0.12s;
+}
+
+.file-drop-zone__bar:nth-child(5) {
+	animation-delay: 0s;
+}
+
+@keyframes file-drop-zone-bar {
+	0%,
+	100% {
+		transform: scaleY(0.5);
+		opacity: 0.65;
+	}
+
+	50% {
+		transform: scaleY(1);
+		opacity: 1;
+	}
+}
+
+.file-drop-zone:hover .file-drop-zone__bar,
+.file-drop-zone.active .file-drop-zone__bar {
+	animation-duration: 0.9s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.file-drop-zone__bar {
+		animation: none;
+		opacity: 1;
+	}
+}
+
+.file-drop-zone__title {
+	font-size: 0.9375rem;
+	font-weight: 600;
+	color: var(--app-text);
+}
+
+.file-drop-zone__hint {
+	font-size: 0.8125rem;
+	font-weight: 400;
+	color: var(--app-muted);
+}
+
+.file-drop-zone__filename {
+	margin: 0.75rem 0 0;
+	width: 100%;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.5rem;
+	border: 1px solid var(--app-border);
+	background: color-mix(in srgb, var(--app-surface) 70%, transparent);
+	font-size: 0.8125rem;
+	font-weight: 400;
+	color: var(--app-muted);
+	transition:
+		border-color 0.2s ease,
+		background-color 0.2s ease;
 }
 
 .file-drop-zone:hover,
 .file-drop-zone.active {
-	border-color: color-mix(in srgb, var(--app-accent) 55%, var(--app-border-strong));
-	background: color-mix(in srgb, var(--app-accent) 6%, var(--app-surface-input));
-	color: var(--app-text);
+	border-color: color-mix(in srgb, var(--app-accent) 58%, var(--app-border-strong));
+	background:
+		radial-gradient(
+			ellipse 90% 70% at 50% -10%,
+			var(--app-glow),
+			transparent 65%
+		),
+		color-mix(in srgb, var(--app-accent) 10%, var(--app-surface-input));
+	box-shadow:
+		inset 0 1px 0 color-mix(in srgb, var(--app-accent) 14%, transparent),
+		0 0 0 3px var(--app-glow);
 }
 
-.file-drop-zone .filename {
-	font-size: 0.8125rem;
-	font-weight: 400;
-	color: var(--app-muted);
+.file-drop-zone:hover .file-drop-zone__icon,
+.file-drop-zone.active .file-drop-zone__icon {
+	background: color-mix(in srgb, var(--app-accent) 22%, transparent);
+	transform: translateY(-1px);
+}
+
+.file-drop-zone.active {
+	transform: scale(1.01);
+}
+
+.file-drop-zone:focus-visible {
+	outline: none;
+	border-color: var(--app-accent);
+	box-shadow:
+		inset 0 1px 0 color-mix(in srgb, var(--app-accent) 14%, transparent),
+		0 0 0 3px var(--app-glow-strong);
+}
+
+.file-drop-zone.has-file {
+	border-style: solid;
+	border-color: color-mix(in srgb, var(--app-accent) 42%, var(--app-border-strong));
+	background:
+		radial-gradient(
+			ellipse 90% 70% at 50% -10%,
+			var(--app-glow-soft),
+			transparent 65%
+		),
+		color-mix(in srgb, var(--app-accent) 8%, var(--app-surface-input));
+}
+
+.file-drop-zone.has-file .file-drop-zone__filename {
+	border-color: color-mix(in srgb, var(--app-accent) 28%, var(--app-border));
+	background: color-mix(in srgb, var(--app-accent) 6%, var(--app-surface));
 }
 
 .app-select {

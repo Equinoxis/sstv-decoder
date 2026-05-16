@@ -44,6 +44,7 @@ dropZone.addEventListener("drop", (event) => {
 });
 
 function handleAudioFile(file) {
+  dropZone.classList.add("has-file");
   audioFileNameDisplay.innerHTML = `Selected file: <span class="font-medium text-app-accent">${file.name}</span>`;
   const reader = new FileReader();
 
