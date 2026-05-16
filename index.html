@@ -260,48 +260,53 @@
             </p>
           </div>
 
-          <div class="sstv-quality-field" id="quality-field">
-            <label for="qualitySelect" class="sstv-quality-field__label"
-              >FFT quality</label
-            >
-            <p class="sstv-quality-field__lede">
-              Higher FFT size improves accuracy but takes longer to decode.
-            </p>
-            <div class="sstv-quality-select-wrap">
-              <select
-                id="qualitySelect"
-                class="app-select app-select--full sstv-quality-select"
-              >
-                <optgroup label="Fast (lower accuracy)">
-                  <option value="64">Ultra fast · FFT 64</option>
-                  <option value="128">Very fast · FFT 128</option>
-                  <option value="256">Fast · FFT 256</option>
-                </optgroup>
-                <optgroup label="Balanced">
-                  <option value="512" selected>Balanced · FFT 512</option>
-                  <option value="1024">Good quality · FFT 1024</option>
-                </optgroup>
-                <optgroup label="Best quality (slower)">
-                  <option value="2048">High quality · FFT 2048</option>
-                </optgroup>
-              </select>
+          <div class="sstv-tool-row">
+            <div class="sstv-quality-field" id="quality-field">
+              <div class="sstv-quality-field__head">
+                <label for="qualitySelect" class="sstv-quality-field__label"
+                  >FFT quality</label
+                >
+                <p class="sstv-quality-field__lede">
+                  Higher FFT size improves accuracy but takes longer to decode.
+                </p>
+              </div>
+              <div class="sstv-quality-field__controls">
+                <div class="sstv-quality-select-wrap">
+                  <select
+                    id="qualitySelect"
+                    class="app-select app-select--full sstv-quality-select"
+                  >
+                    <optgroup label="Fast (lower accuracy)">
+                      <option value="64">Ultra fast · FFT 64</option>
+                      <option value="128">Very fast · FFT 128</option>
+                      <option value="256">Fast · FFT 256</option>
+                    </optgroup>
+                    <optgroup label="Balanced">
+                      <option value="512" selected>Balanced · FFT 512</option>
+                      <option value="1024">Good quality · FFT 1024</option>
+                    </optgroup>
+                    <optgroup label="Best quality (slower)">
+                      <option value="2048">High quality · FFT 2048</option>
+                    </optgroup>
+                  </select>
+                </div>
+                <p
+                  class="sstv-quality-field__hint"
+                  id="qualityHint"
+                  aria-live="polite"
+                >
+                  Balanced — good speed and accuracy for most recordings.
+                </p>
+              </div>
             </div>
-            <p
-              class="sstv-quality-field__hint"
-              id="qualityHint"
-              aria-live="polite"
-            >
-              Balanced — good speed and accuracy for most recordings.
-            </p>
-          </div>
 
-          <label
-            for="audioInput"
-            class="file-drop-zone"
-            id="dropZone"
-            aria-describedby="audioFileNameDisplay"
-          >
-            <span class="file-drop-zone__icon" aria-hidden="true">
+            <label
+              for="audioInput"
+              class="file-drop-zone"
+              id="dropZone"
+              aria-describedby="audioFileNameDisplay"
+            >
+              <span class="file-drop-zone__icon" aria-hidden="true">
               <svg
                 class="file-drop-zone__wave"
                 xmlns="http://www.w3.org/2000/svg"
@@ -363,7 +368,8 @@
             <p class="file-drop-zone__filename" id="audioFileNameDisplay">
               No file selected
             </p>
-          </label>
+            </label>
+          </div>
 
           <div class="flex flex-wrap items-center justify-center gap-3">
             <button type="button" id="decodeButton" class="app-btn-primary">
