@@ -9,6 +9,7 @@ import {
   deleteById,
   clearAll,
 } from "./decode-history-store.js";
+import { showConfirmDialog } from "./confirm-dialog.js";
 
 const audioInput = document.getElementById("audioInput");
 const dropZone = document.getElementById("dropZone");
@@ -330,13 +331,16 @@ async function removeDecodedImage(id) {
 
 async function clearDecodeHistory() {
   if (decodedImages.length === 0) return;
-  if (
-    !confirm(
-      "Remove all decoded images from this browser? This cannot be undone."
-    )
-  ) {
-    return;
-  }
+
+  const confirmed = await showConfirmDialog({
+    title: "Clear decode history?",
+    message:
+      "Remove all decoded images from this browser. This cannot be undone.",
+    confirmLabel: "Clear history",
+    cancelLabel: "Cancel",
+    danger: true,
+  });
+  if (!confirmed) return;
 
   revokeAllDecodedImages();
   decodedImages.length = 0;
@@ -380,7 +384,7 @@ function renderDecodeGallery() {
   const archived = decodedImages.slice(0, -1);
   decodeGalleryList.replaceChildren();
 
-  for (let i = archived.length - 1; i >= 0; i--) {
+  for (let i = 0; i < archived.length; i++) {
     const entry = archived[i];
     const decodeIndex = i;
     const decodeNumber = i + 1;
@@ -436,7 +440,7 @@ function renderDecodeGallery() {
     decodeGalleryList.append(li);
   }
 
-  decodeGalleryList.scrollLeft = 0;
+  decodeGalleryList.scrollLeft = decodeGalleryList.scrollWidth;
 }
 
 window.addEventListener("beforeunload", revokeAllDecodedImages);

@@ -1049,6 +1049,36 @@
       <span class="scroll-hint__progress" aria-hidden="true"></span>
     </div>
 
+    <div id="confirmDialog" class="confirm-dialog" hidden aria-hidden="true">
+      <div class="confirm-dialog__backdrop" data-confirm-dismiss></div>
+      <div
+        class="confirm-dialog__panel"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="confirmDialogTitle"
+        aria-describedby="confirmDialogMessage"
+      >
+        <h2 id="confirmDialogTitle" class="confirm-dialog__title"></h2>
+        <p id="confirmDialogMessage" class="confirm-dialog__message"></p>
+        <div class="confirm-dialog__actions">
+          <button
+            type="button"
+            id="confirmDialogCancel"
+            class="app-btn-secondary"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            id="confirmDialogConfirm"
+            class="app-btn-primary confirm-dialog__confirm--danger"
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.js"></script>
 
     <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>

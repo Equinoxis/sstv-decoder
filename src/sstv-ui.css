@@ -862,6 +862,102 @@
 	opacity: 1;
 }
 
+body.confirm-dialog-open {
+	overflow: hidden;
+}
+
+.confirm-dialog {
+	position: fixed;
+	inset: 0;
+	z-index: 1200;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1.25rem;
+}
+
+.confirm-dialog[hidden] {
+	display: none;
+}
+
+.confirm-dialog__backdrop {
+	position: absolute;
+	inset: 0;
+	background: color-mix(in srgb, var(--app-bg) 55%, transparent);
+	backdrop-filter: blur(4px);
+}
+
+.confirm-dialog__panel {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	width: min(100%, 22rem);
+	padding: 1.25rem 1.35rem;
+	border-radius: 0.75rem;
+	border: 1px solid var(--app-border);
+	background: var(--app-surface-input);
+	box-shadow:
+		0 12px 40px color-mix(in srgb, var(--app-bg) 65%, transparent),
+		0 1px 0 color-mix(in srgb, var(--app-accent) 8%, transparent) inset;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.confirm-dialog__panel {
+		animation: confirm-dialog-in 0.2s ease-out;
+	}
+}
+
+@keyframes confirm-dialog-in {
+	from {
+		opacity: 0;
+		transform: scale(0.97) translateY(0.25rem);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1) translateY(0);
+	}
+}
+
+.confirm-dialog__title {
+	margin: 0;
+	font-size: 1rem;
+	font-weight: 600;
+	line-height: 1.35;
+	color: var(--app-text);
+}
+
+.confirm-dialog__message {
+	margin: 0;
+	font-size: 0.875rem;
+	line-height: 1.55;
+	color: color-mix(in srgb, var(--app-text) 88%, var(--app-muted));
+}
+
+.confirm-dialog__actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	gap: 0.5rem;
+}
+
+.confirm-dialog__actions .app-btn-primary,
+.confirm-dialog__actions .app-btn-secondary {
+	min-width: 6.5rem;
+	padding: 0.5rem 1rem;
+	font-size: 0.875rem;
+}
+
+.confirm-dialog__confirm--danger {
+	border-color: color-mix(in srgb, var(--app-danger, #dc2626) 55%, var(--app-border));
+	background: color-mix(in srgb, var(--app-danger, #dc2626) 88%, var(--app-accent));
+}
+
+.confirm-dialog__confirm--danger:hover {
+	background: var(--app-danger, #dc2626);
+}
+
 .feedback-card {
 	display: none;
 	width: 100%;
