@@ -54,16 +54,146 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "SSTV Decoder",
-        "url": "https://sstv-decoder.mathieurenaud.fr/",
-        "description": "Browser-based SSTV decoder that converts Slow Scan Television audio into images. Supports Robot36, Scottie1, Martin1, and more.",
-        "author": {
-          "@type": "Person",
-          "name": "Mathieu Renaud",
-          "url": "https://mathieurenaud.fr/"
-        },
-        "image": "https://sstv-decoder.mathieurenaud.fr/assets/preview.jpg"
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://sstv-decoder.mathieurenaud.fr/#website",
+            "url": "https://sstv-decoder.mathieurenaud.fr/",
+            "name": "Online SSTV Decoder",
+            "description": "Decode SSTV (Slow Scan Television) audio signals into images online. Supports Robot36, Scottie1, Martin1, and other ham radio modes directly in your browser.",
+            "inLanguage": "en",
+            "publisher": {
+              "@id": "https://sstv-decoder.mathieurenaud.fr/#organization"
+            }
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://sstv-decoder.mathieurenaud.fr/#webpage",
+            "url": "https://sstv-decoder.mathieurenaud.fr/",
+            "name": "Online SSTV Decoder - Decode Slow Scan Television Audio to Images",
+            "description": "Decode SSTV (Slow Scan Television) audio signals into images online. Supports Robot36, Scottie1, Martin1, and other ham radio modes directly in your browser.",
+            "inLanguage": "en",
+            "isPartOf": {
+              "@id": "https://sstv-decoder.mathieurenaud.fr/#website"
+            },
+            "about": {
+              "@id": "https://sstv-decoder.mathieurenaud.fr/#software"
+            },
+            "breadcrumb": {
+              "@id": "https://sstv-decoder.mathieurenaud.fr/#breadcrumb"
+            },
+            "primaryImageOfPage": {
+              "@type": "ImageObject",
+              "url": "https://sstv-decoder.mathieurenaud.fr/assets/preview.jpg"
+            }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://sstv-decoder.mathieurenaud.fr/#breadcrumb",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Mathieu Renaud",
+                "item": "https://mathieurenaud.fr/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Online SSTV Decoder",
+                "item": "https://sstv-decoder.mathieurenaud.fr/"
+              }
+            ]
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://sstv-decoder.mathieurenaud.fr/#software",
+            "name": "Online SSTV Decoder - Decode Slow Scan Television Audio to Images",
+            "description": "Decode SSTV (Slow Scan Television) audio signals into images online. Supports Robot36, Scottie1, Martin1, and other ham radio modes directly in your browser.",
+            "url": "https://sstv-decoder.mathieurenaud.fr/",
+            "image": "https://sstv-decoder.mathieurenaud.fr/assets/preview.jpg",
+            "applicationCategory": "MultimediaApplication",
+            "operatingSystem": "Web browser",
+            "browserRequirements": "Requires JavaScript. Requires a modern web browser.",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "EUR"
+            },
+            "author": {
+              "@id": "https://sstv-decoder.mathieurenaud.fr/#person"
+            }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://sstv-decoder.mathieurenaud.fr/#person",
+            "name": "Mathieu Renaud",
+            "url": "https://mathieurenaud.fr"
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://sstv-decoder.mathieurenaud.fr/#organization",
+            "name": "Mathieu Renaud",
+            "url": "https://mathieurenaud.fr/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://sstv-decoder.mathieurenaud.fr/assets/preview.jpg"
+            },
+            "sameAs": [
+              "https://twitter.com/Mathieu_Renaud_",
+              "https://www.linkedin.com/in/mathieu-renaud-inge"
+            ],
+            "founder": {
+              "@id": "https://sstv-decoder.mathieurenaud.fr/#person"
+            }
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://sstv-decoder.mathieurenaud.fr/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is SSTV and how does it work?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "SSTV, or Slow Scan Television, is a method of sending still images over audio frequencies. It works by encoding each line of the image as a sequence of tones, which can be transmitted via radio and decoded back into a picture using software or hardware tools."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I decode SSTV signals directly in my browser?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. With modern web technologies such as the Web Audio API and JavaScript, you can decode SSTV audio recordings in real time within your browser. This website provides a cross-platform tool for decoding common SSTV formats like Robot36, Scottie1, and Martin1."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What types of files can I use to decode an SSTV image?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "You can upload most common audio file formats, such as WAV, MP3, or OGG. Ensure the recording is clear and has minimal background noise for accurate decoding."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What are the most common SSTV modes?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Popular SSTV modes include Robot36, Scottie1, Martin1 and ScottieSDX. Each mode differs in resolution, color format, and transmission time. This decoder supports a wide variety of these formats automatically by detecting the VIS code."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Do I need a license to transmit SSTV signals?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Transmitting SSTV over radio frequencies generally requires an amateur radio license, depending on your country's regulations. Receiving and decoding SSTV transmissions, however, is legal and unrestricted in most regions."
+                }
+              }
+            ]
+          }
+        ]
       }
     </script>
 
