@@ -515,10 +515,36 @@
             </button>
           </div>
 
-          <progress id="decodeProgress" value="0" max="100"></progress>
+          <div
+            id="decodeProgressSlot"
+            class="decode-progress-slot"
+            aria-hidden="true"
+          >
+            <div
+              id="decodeProgress"
+              class="decode-progress"
+              role="progressbar"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="0"
+              aria-label="Decoding progress"
+            >
+            <div class="decode-progress__meta">
+              <span class="decode-progress__status">Decoding…</span>
+              <span class="decode-progress__percent" aria-hidden="true"
+                >0%</span
+              >
+            </div>
+            <div class="decode-progress__track">
+              <div class="decode-progress__fill"></div>
+            </div>
+            </div>
+          </div>
 
-          <div class="sstv-canvas-wrap">
-            <canvas id="sstvCanvas"></canvas>
+          <div class="sstv-canvas-wrap" id="sstvCanvasWrap">
+            <div class="sstv-canvas-wrap__inner">
+              <canvas id="sstvCanvas"></canvas>
+            </div>
           </div>
 
           <p id="errorMessage" role="alert"></p>

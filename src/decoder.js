@@ -10,7 +10,13 @@ const decodeButton = document.getElementById("decodeButton");
 const downloadImageButton = document.getElementById("downloadImageButton");
 const feedbackCard = document.getElementById("feedbackCard");
 const errorMessage = document.getElementById("errorMessage");
+const decodeProgressSlot = document.getElementById("decodeProgressSlot");
 const decodeProgress = document.getElementById("decodeProgress");
+const decodeProgressFill = decodeProgress?.querySelector(".decode-progress__fill");
+const sstvCanvasWrap = document.getElementById("sstvCanvasWrap");
+const decodeProgressPercent = decodeProgress?.querySelector(
+  ".decode-progress__percent"
+);
 const imageScrollHint = document.getElementById("imageScrollHint");
 const imageScrollHintBtn = document.getElementById("imageScrollHintBtn");
 const imageScrollHintProgress = imageScrollHint?.querySelector(
@@ -19,7 +25,18 @@ const imageScrollHintProgress = imageScrollHint?.querySelector(
 
 const HINT_VISIBLE_MS = 5500;
 const HINT_EXIT_MS = 300;
+const DECODE_PROGRESS_EXIT_MS = 550;
 const IMAGE_VISIBILITY_THRESHOLD = 0.7;
+
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+);
+
+let displayedDecodeProgress = 0;
+let targetDecodeProgress = 0;
+let decodeProgressRafId = null;
+let decodeProgressHideTimer = null;
+let decodeProgressHideGeneration = 0;
 
 let currentSamples = null;
 let currentSampleRate = null;
@@ -34,10 +51,155 @@ function getDecodedImageDownloadName(sourceFileName) {
 const decoderWorker = new DecoderWorker();
 
 decodeButton.disabled = true;
-canvas.style.display = "none";
 
 function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+function clampDecodeProgress(percent) {
+  return Math.max(0, Math.min(100, percent));
+}
+
+function applyDecodeProgressDisplay(percent) {
+  if (!decodeProgress || !decodeProgressFill) return;
+
+  const clamped = clampDecodeProgress(percent);
+  decodeProgressFill.style.setProperty(
+    "--decode-progress",
+    String(clamped / 100)
+  );
+  decodeProgress.setAttribute("aria-valuenow", String(Math.round(clamped)));
+  if (decodeProgressPercent) {
+    decodeProgressPercent.textContent = `${Math.round(clamped)}%`;
+  }
+}
+
+function stopDecodeProgressAnimation() {
+  if (decodeProgressRafId !== null) {
+    cancelAnimationFrame(decodeProgressRafId);
+    decodeProgressRafId = null;
+  }
+}
+
+function tickDecodeProgress() {
+  const delta = targetDecodeProgress - displayedDecodeProgress;
+
+  if (Math.abs(delta) < 0.5) {
+    displayedDecodeProgress = targetDecodeProgress;
+    applyDecodeProgressDisplay(displayedDecodeProgress);
+    decodeProgressRafId = null;
+    return;
+  }
+
+  displayedDecodeProgress += delta * 0.12;
+  applyDecodeProgressDisplay(displayedDecodeProgress);
+  decodeProgressRafId = requestAnimationFrame(tickDecodeProgress);
+}
+
+function setDecodeProgressTarget(percent) {
+  targetDecodeProgress = clampDecodeProgress(percent);
+
+  if (prefersReducedMotion.matches) {
+    stopDecodeProgressAnimation();
+    displayedDecodeProgress = targetDecodeProgress;
+    applyDecodeProgressDisplay(displayedDecodeProgress);
+    return;
+  }
+
+  if (decodeProgressRafId === null) {
+    decodeProgressRafId = requestAnimationFrame(tickDecodeProgress);
+  }
+}
+
+function resetDecodeProgress() {
+  stopDecodeProgressAnimation();
+  displayedDecodeProgress = 0;
+  targetDecodeProgress = 0;
+  applyDecodeProgressDisplay(0);
+}
+
+function clearDecodeProgressHideTimer() {
+  if (decodeProgressHideTimer !== null) {
+    clearTimeout(decodeProgressHideTimer);
+    decodeProgressHideTimer = null;
+  }
+}
+
+function showDecodeProgress({ reset = false } = {}) {
+  if (!decodeProgress || !decodeProgressSlot) return;
+
+  clearDecodeProgressHideTimer();
+  decodeProgressHideGeneration += 1;
+
+  if (reset) resetDecodeProgress();
+
+  decodeProgress.classList.remove("decode-progress--leaving");
+  decodeProgressSlot.classList.add("decode-progress-slot--open");
+  decodeProgressSlot.setAttribute("aria-hidden", "false");
+  requestAnimationFrame(() => {
+    decodeProgress.classList.add("decode-progress--visible");
+  });
+}
+
+function hideDecodeProgress({ onComplete } = {}) {
+  if (!decodeProgress || !decodeProgressSlot) return;
+  if (!decodeProgressSlot.classList.contains("decode-progress-slot--open")) {
+    onComplete?.();
+    return;
+  }
+
+  const generation = ++decodeProgressHideGeneration;
+  stopDecodeProgressAnimation();
+  clearDecodeProgressHideTimer();
+  decodeProgress.classList.remove("decode-progress--visible");
+  decodeProgress.classList.add("decode-progress--leaving");
+  decodeProgressSlot.classList.remove("decode-progress-slot--open");
+  decodeProgressSlot.setAttribute("aria-hidden", "true");
+
+  const finishHide = () => {
+    if (generation !== decodeProgressHideGeneration) return;
+    decodeProgress.classList.remove("decode-progress--leaving");
+    resetDecodeProgress();
+    onComplete?.();
+  };
+
+  const onTransitionEnd = (event) => {
+    if (event.target !== decodeProgressSlot) return;
+    if (event.propertyName !== "grid-template-rows") return;
+    decodeProgressSlot.removeEventListener("transitionend", onTransitionEnd);
+    if (decodeProgressHideTimer !== null) {
+      clearTimeout(decodeProgressHideTimer);
+      decodeProgressHideTimer = null;
+    }
+    finishHide();
+  };
+
+  decodeProgressSlot.addEventListener("transitionend", onTransitionEnd);
+  decodeProgressHideTimer = setTimeout(() => {
+    decodeProgressSlot.removeEventListener("transitionend", onTransitionEnd);
+    decodeProgressHideTimer = null;
+    finishHide();
+  }, DECODE_PROGRESS_EXIT_MS + 50);
+}
+
+function hideDecodedCanvas() {
+  if (!sstvCanvasWrap) return;
+  sstvCanvasWrap.classList.remove(
+    "sstv-canvas-wrap--open",
+    "sstv-canvas-wrap--entering"
+  );
+}
+
+function revealDecodedCanvas() {
+  if (!sstvCanvasWrap) return;
+  if (sstvCanvasWrap.classList.contains("sstv-canvas-wrap--open")) return;
+
+  sstvCanvasWrap.classList.add("sstv-canvas-wrap--entering", "sstv-canvas-wrap--open");
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      sstvCanvasWrap.classList.remove("sstv-canvas-wrap--entering");
+    });
+  });
 }
 
 function getImageVisibilityRatio(element) {
@@ -280,6 +442,8 @@ decodeButton.addEventListener("click", () => {
   if (!currentSamples || !currentSampleRate) return;
 
   decodeButton.disabled = true;
+  errorMessage.style.display = "none";
+  showDecodeProgress({ reset: true });
 
   const fftQuality = parseInt(qualitySelect.value, 10);
 
@@ -292,30 +456,29 @@ decodeButton.addEventListener("click", () => {
 
 decoderWorker.onmessage = (event) => {
   if (event.data.progress !== undefined) {
-    decodeProgress.style.display = "block";
-    errorMessage.style.display = "none";
-    decodeProgress.value = event.data.progress;
+    showDecodeProgress();
+    setDecodeProgressTarget(event.data.progress);
     return;
   }
 
   const { imageData, width, height, error } = event.data;
-  decodeProgress.style.display = "none";
 
   if (error) {
-    hideImageScrollHint({ immediate: true });
+    hideDecodeProgress({
+      onComplete: () => {
+        hideImageScrollHint({ immediate: true });
 
-    errorMessage.textContent = `Error: ${error.message}`;
-    errorMessage.style.display = "block";
+        errorMessage.textContent = `Error: ${error.message}`;
+        errorMessage.style.display = "block";
 
-    canvas.style.display = "none";
-    downloadImageButton.style.display = "none";
-    feedbackCard.style.display = "none";
-    decodeButton.disabled = false;
+        hideDecodedCanvas();
+        downloadImageButton.style.display = "none";
+        feedbackCard.style.display = "none";
+        decodeButton.disabled = false;
+      },
+    });
     return;
   }
-
-  canvas.width = width;
-  canvas.height = height;
 
   const imgData = new ImageData(
     new Uint8ClampedArray(imageData),
@@ -323,16 +486,30 @@ decoderWorker.onmessage = (event) => {
     height
   );
   lastDecodedImage = imgData;
-  ctx.putImageData(imgData, 0, 0);
-  canvas.style.display = "block";
-  downloadImageButton.style.display = "inline-flex";
-  feedbackCard.style.display = "block";
 
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => handlePostDecodeScroll(canvas));
+  hideDecodeProgress({
+    onComplete: () => {
+      const isFirstReveal = !sstvCanvasWrap?.classList.contains(
+        "sstv-canvas-wrap--open"
+      );
+
+      canvas.width = width;
+      canvas.height = height;
+      ctx.putImageData(imgData, 0, 0);
+
+      if (isFirstReveal) {
+        revealDecodedCanvas();
+      }
+      downloadImageButton.style.display = "inline-flex";
+      feedbackCard.style.display = "block";
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => handlePostDecodeScroll(canvas));
+      });
+
+      decodeButton.disabled = false;
+    },
   });
-
-  decodeButton.disabled = false;
 };
 
 decoderWorker.onerror = (e) => {

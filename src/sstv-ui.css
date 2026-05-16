@@ -359,32 +359,173 @@
 	color: color-mix(in srgb, var(--app-text) 85%, var(--app-muted));
 }
 
-#decodeProgress {
-	display: none;
+.decode-progress-slot {
+	--decode-progress-slot-duration: 0.5s;
+	display: grid;
+	grid-template-rows: 0fr;
 	width: 100%;
-	height: 0.5rem;
-	appearance: none;
-	-webkit-appearance: none;
-	border: none;
+	margin-block: 0;
+	transition:
+		grid-template-rows var(--decode-progress-slot-duration) cubic-bezier(0.4, 0, 0.2, 1),
+		margin-block var(--decode-progress-slot-duration) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.decode-progress-slot--open {
+	grid-template-rows: 1fr;
+	margin-block: 0.625rem 0.25rem;
+}
+
+.decode-progress-slot > .decode-progress {
+	min-height: 0;
+	overflow: hidden;
+}
+
+.decode-progress {
+	display: grid;
+	gap: 0.5rem;
+	width: 100%;
+	opacity: 0;
+	pointer-events: none;
+	transform: translateY(0.2rem);
+	transition:
+		opacity 0.35s ease-out,
+		transform 0.35s ease-out;
+}
+
+.decode-progress--visible {
+	opacity: 1;
+	pointer-events: auto;
+	transform: translateY(0);
+}
+
+.decode-progress--leaving {
+	opacity: 0;
+	pointer-events: none;
+	transform: translateY(-0.15rem);
+	transition:
+		opacity 0.4s ease-in,
+		transform 0.4s ease-in;
+}
+
+.decode-progress--leaving .decode-progress__fill::after {
+	animation: none;
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.decode-progress__meta {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 0.75rem;
+	font-size: 0.875rem;
+	line-height: 1.35;
+}
+
+.decode-progress__status {
+	font-weight: 600;
+	color: var(--app-text);
+}
+
+.decode-progress__percent {
+	font-variant-numeric: tabular-nums;
+	font-weight: 600;
+	font-size: 0.9375rem;
+	color: var(--app-accent);
+}
+
+.decode-progress__track {
+	--decode-progress-pad: 0.3125rem;
+	--decode-progress-inner-radius: 9999px;
+	position: relative;
+	height: 1.5rem;
+	padding: var(--decode-progress-pad);
+	border: 1px solid var(--app-border);
 	border-radius: 9999px;
 	overflow: hidden;
-	background-color: color-mix(in srgb, var(--app-muted) 18%, var(--app-surface-input));
+	background-color: var(--app-surface-input);
+	box-shadow: inset 0 1px 2px color-mix(in srgb, var(--app-text) 8%, transparent);
 }
 
-#decodeProgress::-webkit-progress-bar {
-	background-color: color-mix(in srgb, var(--app-muted) 18%, var(--app-surface-input));
-	border-radius: 9999px;
+.decode-progress__fill {
+	position: absolute;
+	top: var(--decode-progress-pad);
+	bottom: var(--decode-progress-pad);
+	left: var(--decode-progress-pad);
+	width: calc((100% - 2 * var(--decode-progress-pad)) * var(--decode-progress, 0));
+	border-radius: var(--decode-progress-inner-radius);
+	overflow: hidden;
+	background: linear-gradient(
+		90deg,
+		color-mix(in srgb, var(--app-accent) 88%, #000) 0%,
+		var(--app-accent) 45%,
+		color-mix(in srgb, var(--app-accent-hover) 92%, var(--app-accent)) 100%
+	);
+	box-shadow:
+		inset 0 1px 0 color-mix(in srgb, #fff 24%, transparent),
+		inset 0 0 14px color-mix(in srgb, var(--app-accent) 42%, transparent);
+	transition: width 0.12s ease-out;
 }
 
-#decodeProgress::-webkit-progress-value {
-	background-color: var(--app-accent);
-	border-radius: 9999px;
-	transition: width 0.2s ease;
+.decode-progress--visible .decode-progress__fill::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	background: linear-gradient(
+		105deg,
+		transparent 0%,
+		transparent 38%,
+		color-mix(in srgb, #fff 42%, transparent) 50%,
+		transparent 62%,
+		transparent 100%
+	);
+	background-size: 200% 100%;
+	animation: decode-progress-shimmer 1.6s ease-in-out infinite;
 }
 
-#decodeProgress::-moz-progress-bar {
-	background-color: var(--app-accent);
-	border-radius: 9999px;
+@keyframes decode-progress-shimmer {
+	0% {
+		background-position: 120% 0;
+	}
+
+	100% {
+		background-position: -120% 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.decode-progress-slot {
+		--decode-progress-slot-duration: 0.15s;
+	}
+
+	.decode-progress {
+		transform: none;
+		transition: opacity 0.15s ease;
+	}
+
+	.decode-progress--visible {
+		transform: none;
+		transition: opacity 0.15s ease-out;
+	}
+
+	.decode-progress--leaving {
+		transform: none;
+		transition: opacity 0.15s ease-in;
+	}
+
+	.sstv-canvas-wrap {
+		--sstv-canvas-duration: 0.15s;
+		transition: opacity 0.15s ease-out;
+	}
+
+	.decode-progress__fill {
+		transition: none;
+	}
+
+	.decode-progress--visible .decode-progress__fill::after {
+		animation: none;
+	}
 }
 
 #errorMessage {
@@ -403,13 +544,36 @@
 }
 
 .sstv-canvas-wrap {
-	display: flex;
+	--sstv-canvas-duration: 0.5s;
+	display: grid;
+	grid-template-rows: 0fr;
 	width: 100%;
+	opacity: 0;
+	transition:
+		grid-template-rows var(--sstv-canvas-duration) cubic-bezier(0.4, 0, 0.2, 1),
+		opacity 0.45s ease-out;
+}
+
+.sstv-canvas-wrap--open {
+	grid-template-rows: 1fr;
+	opacity: 1;
+}
+
+.sstv-canvas-wrap--entering {
+	opacity: 0;
+}
+
+.sstv-canvas-wrap__inner {
+	display: flex;
+	min-height: 0;
+	overflow: hidden;
 	justify-content: center;
+	align-items: flex-start;
 }
 
 #sstvCanvas {
-	display: none;
+	display: block;
+	flex-shrink: 0;
 	/* Scale up from native SSTV resolution (e.g. 320px) for preview; download stays full-res */
 	width: min(100%, 36rem);
 	height: auto;
