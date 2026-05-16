@@ -1,5 +1,14 @@
 import DecoderWorker from "./worker/decoder.js?worker";
-import { openDecodeGallery } from "./decode-gallery.js";
+import {
+  openDecodeGallery,
+  refreshOpenDecodeGallery,
+} from "./decode-gallery.js";
+import {
+  loadAll,
+  save,
+  deleteById,
+  clearAll,
+} from "./decode-history-store.js";
 
 const audioInput = document.getElementById("audioInput");
 const dropZone = document.getElementById("dropZone");
@@ -18,6 +27,7 @@ const sstvCanvasWrap = document.getElementById("sstvCanvasWrap");
 const sstvCanvasOpen = document.getElementById("sstvCanvasOpen");
 const decodeGallery = document.getElementById("decodeGallery");
 const decodeGalleryList = document.getElementById("decodeGalleryList");
+const clearDecodeHistoryBtn = document.getElementById("clearDecodeHistoryBtn");
 const decodeProgressPercent = decodeProgress?.querySelector(
   ".decode-progress__percent"
 );
@@ -45,10 +55,10 @@ let decodeProgressHideGeneration = 0;
 let currentSamples = null;
 let currentSampleRate = null;
 let currentSourceFileName = null;
-let lastDecodedImage = null;
-
-/** @type {{ imageData: ImageData, width: number, height: number, sourceFileName: string | null, objectUrl: string }[]} */
+/** @type {{ id: string, width: number, height: number, sourceFileName: string | null, objectUrl: string, blob: Blob, imageData?: ImageData }[]} */
 const decodedImages = [];
+
+let decodeHistoryReady = false;
 
 function getDecodedImageDownloadName(sourceFileName) {
   const name = sourceFileName.split(/[/\\]/).pop() || "audio";
@@ -197,27 +207,177 @@ function hideDecodedCanvas() {
   );
 }
 
-function imageDataToObjectUrl(imageData) {
+function imageDataToPngBlob(imageData) {
   const offscreen = new OffscreenCanvas(imageData.width, imageData.height);
   const offCtx = offscreen.getContext("2d");
   offCtx.putImageData(imageData, 0, 0);
   return offscreen.convertToBlob({ type: "image/png" }).then((blob) => {
     if (!blob) throw new Error("Failed to create image blob");
-    return URL.createObjectURL(blob);
+    return blob;
   });
 }
 
-function revokeDecodedImageUrls() {
+async function blobToImageData(blob, width, height) {
+  const bitmap = await createImageBitmap(blob);
+  const offscreen = new OffscreenCanvas(width, height);
+  const offCtx = offscreen.getContext("2d");
+  offCtx.drawImage(bitmap, 0, 0);
+  bitmap.close();
+  return offCtx.getImageData(0, 0, width, height);
+}
+
+function revokeEntry(entry) {
+  URL.revokeObjectURL(entry.objectUrl);
+}
+
+function revokeAllDecodedImages() {
   for (const item of decodedImages) {
-    URL.revokeObjectURL(item.objectUrl);
+    revokeEntry(item);
   }
 }
 
+function removeEvictedFromMemory(evictedIds) {
+  if (!evictedIds.length) return;
+  const evicted = new Set(evictedIds);
+  for (let i = decodedImages.length - 1; i >= 0; i--) {
+    if (evicted.has(decodedImages[i].id)) {
+      revokeEntry(decodedImages[i]);
+      decodedImages.splice(i, 1);
+    }
+  }
+}
+
+function getLatestEntry() {
+  return decodedImages[decodedImages.length - 1] ?? null;
+}
+
+async function ensureLatestImageData() {
+  const latest = getLatestEntry();
+  if (!latest) return null;
+  if (latest.imageData) return latest.imageData;
+  latest.imageData = await blobToImageData(
+    latest.blob,
+    latest.width,
+    latest.height
+  );
+  return latest.imageData;
+}
+
+async function showLatestOnCanvas() {
+  const latest = getLatestEntry();
+  if (!latest) return;
+
+  const imgData = await ensureLatestImageData();
+  canvas.width = latest.width;
+  canvas.height = latest.height;
+  ctx.putImageData(imgData, 0, 0);
+}
+
+function updateHistoryChrome() {
+  if (!decodeGallery) return;
+  decodeGallery.hidden = decodedImages.length === 0;
+  if (clearDecodeHistoryBtn) {
+    clearDecodeHistoryBtn.disabled = decodedImages.length === 0;
+  }
+
+  if (decodedImages.length === 0) {
+    downloadImageButton.style.display = "none";
+    feedbackCard.style.display = "none";
+    hideDecodedCanvas();
+    return;
+  }
+
+  downloadImageButton.style.display = "inline-flex";
+  feedbackCard.style.display = "block";
+  if (!sstvCanvasWrap?.classList.contains("sstv-canvas-wrap--open")) {
+    revealDecodedCanvas();
+  }
+}
+
+function openGalleryAt(index) {
+  openDecodeGallery(decodedImages, index, {
+    onDeleteImage: (id) => {
+      removeDecodedImage(id);
+    },
+  });
+}
+
+async function removeDecodedImage(id) {
+  const index = decodedImages.findIndex((item) => item.id === id);
+  if (index < 0) return;
+
+  revokeEntry(decodedImages[index]);
+  decodedImages.splice(index, 1);
+
+  try {
+    await deleteById(id);
+  } catch (err) {
+    console.error("Failed to delete decode from storage:", err);
+  }
+
+  if (decodedImages.length === 0) {
+    updateHistoryChrome();
+    renderDecodeGallery();
+    refreshOpenDecodeGallery(decodedImages);
+    return;
+  }
+
+  await showLatestOnCanvas();
+  updateHistoryChrome();
+  renderDecodeGallery();
+  refreshOpenDecodeGallery(decodedImages);
+}
+
+async function clearDecodeHistory() {
+  if (decodedImages.length === 0) return;
+  if (
+    !confirm(
+      "Remove all decoded images from this browser? This cannot be undone."
+    )
+  ) {
+    return;
+  }
+
+  revokeAllDecodedImages();
+  decodedImages.length = 0;
+
+  try {
+    await clearAll();
+  } catch (err) {
+    console.error("Failed to clear decode history:", err);
+  }
+
+  updateHistoryChrome();
+  renderDecodeGallery();
+  refreshOpenDecodeGallery(decodedImages);
+}
+
+function createDeleteIconSvg() {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("viewBox", "0 0 16 16");
+  svg.setAttribute("aria-hidden", "true");
+  svg.classList.add("decode-gallery__delete-icon");
+
+  const line1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  line1.setAttribute("d", "M4 4 L12 12");
+  line1.setAttribute("stroke", "currentColor");
+  line1.setAttribute("stroke-width", "2");
+  line1.setAttribute("stroke-linecap", "round");
+
+  const line2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  line2.setAttribute("d", "M12 4 L4 12");
+  line2.setAttribute("stroke", "currentColor");
+  line2.setAttribute("stroke-width", "2");
+  line2.setAttribute("stroke-linecap", "round");
+
+  svg.append(line1, line2);
+  return svg;
+}
+
 function renderDecodeGallery() {
-  if (!decodeGallery || !decodeGalleryList) return;
+  if (!decodeGalleryList) return;
 
   const archived = decodedImages.slice(0, -1);
-  decodeGallery.hidden = archived.length === 0;
   decodeGalleryList.replaceChildren();
 
   for (let i = archived.length - 1; i >= 0; i--) {
@@ -228,6 +388,9 @@ function renderDecodeGallery() {
     const li = document.createElement("li");
     li.className = "decode-gallery__item";
 
+    const thumbWrap = document.createElement("div");
+    thumbWrap.className = "decode-gallery__thumb-wrap";
+
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "decode-gallery__btn";
@@ -237,34 +400,86 @@ function renderDecodeGallery() {
     btn.setAttribute("aria-label", label);
     if (entry.sourceFileName) btn.title = entry.sourceFileName;
 
-    const thumb = document.createElement("canvas");
+    const thumb = document.createElement("img");
+    thumb.src = entry.objectUrl;
     thumb.width = entry.width;
     thumb.height = entry.height;
+    thumb.alt = "";
     thumb.className = "decode-gallery__thumb";
-    thumb.getContext("2d").putImageData(entry.imageData, 0, 0);
 
     const srOnly = document.createElement("span");
     srOnly.className = "decode-gallery__sr-only";
     srOnly.textContent = label;
 
     btn.append(thumb, srOnly);
-    btn.addEventListener("click", () => {
-      openDecodeGallery(decodedImages, decodeIndex);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "decode-gallery__delete";
+    const deleteLabel = entry.sourceFileName
+      ? `Remove ${entry.sourceFileName} from history`
+      : `Remove decode ${decodeNumber} from history`;
+    deleteBtn.setAttribute("aria-label", deleteLabel);
+    deleteBtn.title = deleteLabel;
+    deleteBtn.append(createDeleteIconSvg());
+    deleteBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      removeDecodedImage(entry.id);
     });
 
-    li.append(btn);
+    btn.addEventListener("click", () => {
+      openGalleryAt(decodeIndex);
+    });
+
+    thumbWrap.append(btn);
+    li.append(thumbWrap, deleteBtn);
     decodeGalleryList.append(li);
   }
 
   decodeGalleryList.scrollLeft = 0;
 }
 
-window.addEventListener("beforeunload", revokeDecodedImageUrls);
+window.addEventListener("beforeunload", revokeAllDecodedImages);
+
+clearDecodeHistoryBtn?.addEventListener("click", () => {
+  clearDecodeHistory();
+});
 
 sstvCanvasOpen?.addEventListener("click", () => {
   if (!decodedImages.length) return;
-  openDecodeGallery(decodedImages, decodedImages.length - 1);
+  openGalleryAt(decodedImages.length - 1);
 });
+
+async function initDecodeHistory() {
+  try {
+    const records = await loadAll();
+    for (const record of records) {
+      decodedImages.push({
+        id: record.id,
+        width: record.width,
+        height: record.height,
+        sourceFileName: record.sourceFileName,
+        blob: record.blob,
+        objectUrl: URL.createObjectURL(record.blob),
+      });
+    }
+
+    if (decodedImages.length > 0) {
+      await showLatestOnCanvas();
+      updateHistoryChrome();
+      renderDecodeGallery();
+    }
+  } catch (err) {
+    console.error("Failed to load decode history:", err);
+  } finally {
+    decodeHistoryReady = true;
+    if (currentSamples && currentSampleRate) {
+      decodeButton.disabled = false;
+    }
+  }
+}
+
+initDecodeHistory();
 
 function revealDecodedCanvas() {
   if (!sstvCanvasWrap) return;
@@ -504,7 +719,9 @@ function handleAudioFile(file) {
       currentSamples = decoded.getChannelData(0).slice();
       currentSampleRate = decoded.sampleRate;
 
-      decodeButton.disabled = false;
+      if (decodeHistoryReady) {
+        decodeButton.disabled = false;
+      }
     } catch (err) {
       console.error("Error decoding audio file:", err);
       alert("Failed to decode the audio file.");
@@ -515,7 +732,7 @@ function handleAudioFile(file) {
 }
 
 decodeButton.addEventListener("click", () => {
-  if (!currentSamples || !currentSampleRate) return;
+  if (!currentSamples || !currentSampleRate || !decodeHistoryReady) return;
 
   decodeButton.disabled = true;
   errorMessage.style.display = "none";
@@ -547,12 +764,8 @@ decoderWorker.onmessage = (event) => {
         errorMessage.textContent = `Error: ${error.message}`;
         errorMessage.style.display = "block";
 
-        hideDecodedCanvas();
-        if (decodedImages.length === 0) {
-          downloadImageButton.style.display = "none";
-          feedbackCard.style.display = "none";
-        }
-        decodeButton.disabled = false;
+        updateHistoryChrome();
+        decodeButton.disabled = !decodeHistoryReady;
       },
     });
     return;
@@ -567,15 +780,36 @@ decoderWorker.onmessage = (event) => {
   hideDecodeProgress({
     onComplete: async () => {
       try {
-        const objectUrl = await imageDataToObjectUrl(imgData);
+        const blob = await imageDataToPngBlob(imgData);
+        const objectUrl = URL.createObjectURL(blob);
+        const id = crypto.randomUUID();
+        const createdAt = Date.now();
+
         decodedImages.push({
+          id,
           imageData: imgData,
           width,
           height,
           sourceFileName: currentSourceFileName,
           objectUrl,
+          blob,
         });
-        lastDecodedImage = imgData;
+
+        const { evictedIds, error: saveError } = await save({
+          id,
+          createdAt,
+          width,
+          height,
+          sourceFileName: currentSourceFileName,
+          blob,
+        });
+
+        removeEvictedFromMemory(evictedIds);
+
+        if (saveError) {
+          errorMessage.textContent = saveError;
+          errorMessage.style.display = "block";
+        }
 
         const isFirstReveal = !sstvCanvasWrap?.classList.contains(
           "sstv-canvas-wrap--open"
@@ -588,9 +822,9 @@ decoderWorker.onmessage = (event) => {
         if (isFirstReveal) {
           revealDecodedCanvas();
         }
+        updateHistoryChrome();
         renderDecodeGallery();
-        downloadImageButton.style.display = "inline-flex";
-        feedbackCard.style.display = "block";
+        refreshOpenDecodeGallery(decodedImages);
 
         requestAnimationFrame(() => {
           requestAnimationFrame(() => handlePostDecodeScroll(canvas));
@@ -610,22 +844,20 @@ decoderWorker.onerror = (e) => {
   console.error("Worker error:", e.message, e);
 };
 
-downloadImageButton.addEventListener("click", () => {
-  if (!lastDecodedImage) return;
-  const offscreen = new OffscreenCanvas(
-    lastDecodedImage.width,
-    lastDecodedImage.height
-  );
-  const offCtx = offscreen.getContext("2d");
-  offCtx.putImageData(lastDecodedImage, 0, 0);
-  offscreen.convertToBlob().then((blob) => {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = currentSourceFileName
-      ? getDecodedImageDownloadName(currentSourceFileName)
-      : "SSTV decoded.png";
-    a.click();
-    URL.revokeObjectURL(url);
-  });
+downloadImageButton.addEventListener("click", async () => {
+  const latest = getLatestEntry();
+  if (!latest) return;
+
+  const blob =
+    latest.blob ??
+    (await imageDataToPngBlob(await ensureLatestImageData()));
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = latest.sourceFileName
+    ? getDecodedImageDownloadName(latest.sourceFileName)
+    : "SSTV decoded.png";
+  a.click();
+  URL.revokeObjectURL(url);
 });

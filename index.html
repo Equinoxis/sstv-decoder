@@ -556,12 +556,25 @@
             </div>
 
             <div id="decodeGallery" class="decode-gallery" hidden>
-              <p class="decode-gallery__label">Previous decodes</p>
+              <div class="decode-gallery__header">
+                <p class="decode-gallery__label">Previous decodes</p>
+                <button
+                  type="button"
+                  id="clearDecodeHistoryBtn"
+                  class="decode-gallery__clear"
+                >
+                  Clear history
+                </button>
+              </div>
               <ul
                 id="decodeGalleryList"
                 class="decode-gallery__list"
                 role="list"
               ></ul>
+              <p class="decode-gallery__note">
+                <strong>Saved in your browser</strong> - up to 20 decoded images
+                are kept on this device (private local storage).
+              </p>
             </div>
           </div>
 
