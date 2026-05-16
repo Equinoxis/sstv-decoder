@@ -20,6 +20,43 @@ const decoderWorker = new DecoderWorker();
 decodeButton.disabled = true;
 canvas.style.display = "none";
 
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+function scrollToCenterIfAbove(element, { duration = 800 } = {}) {
+  const rect = element.getBoundingClientRect();
+  const elementCenter = rect.top + rect.height / 2;
+  const viewportCenter = window.innerHeight / 2;
+  if (elementCenter <= viewportCenter) return;
+
+  const maxScroll =
+    document.documentElement.scrollHeight - window.innerHeight;
+  const targetY = Math.max(
+    0,
+    Math.min(maxScroll, window.scrollY + elementCenter - viewportCenter)
+  );
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    window.scrollTo(0, targetY);
+    return;
+  }
+
+  const startY = window.scrollY;
+  const delta = targetY - startY;
+  if (delta === 0) return;
+
+  const start = performance.now();
+
+  function step(now) {
+    const t = Math.min(1, (now - start) / duration);
+    window.scrollTo(0, startY + delta * easeInOutCubic(t));
+    if (t < 1) requestAnimationFrame(step);
+  }
+
+  requestAnimationFrame(step);
+}
+
 audioInput.addEventListener("change", (event) => {
   const file = event.target.files[0];
   if (file) handleAudioFile(file);
@@ -116,6 +153,10 @@ decoderWorker.onmessage = (event) => {
   canvas.style.display = "block";
   downloadImageButton.style.display = "inline-flex";
   feedbackCard.style.display = "block";
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => scrollToCenterIfAbove(canvas));
+  });
 
   decodeButton.disabled = false;
 };
