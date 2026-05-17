@@ -21,7 +21,7 @@ const decodeButton = document.getElementById("decodeButton");
 const downloadImageButton = document.getElementById("downloadImageButton");
 const feedbackCard = document.getElementById("feedbackCard");
 const errorMessage = document.getElementById("errorMessage");
-const CONTACT_URL = "https://www.linkedin.com/in/mathieu-renaud-inge/";
+const CONTACT_URL = "https://mathieurenaud.fr/";
 
 function escapeHtml(text) {
   return String(text)
